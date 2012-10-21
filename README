@@ -1,0 +1,2 @@
+This is intended to be a tool to convert proofs from JHilbert to ghilbert. By JHilbert we mean specifically JHilbert as used at wikiproofs, because there will probably be a need to special-case some things, for example around object/variable and var/tvar.
+
