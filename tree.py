@@ -10,6 +10,11 @@ class Tree:
   def elements(self):
     return self._elements
 
+  def to_string(self):
+#    return ' '.join( list comprehension blah blah blah
+    with_parentheses = verify.sexp_to_string(self._elements)
+    return with_parentheses[1:(len(with_parentheses)-1)]
+
 def parse(stream):
   scanner = verify.Scanner(stream)
   tokens = []

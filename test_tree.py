@@ -32,3 +32,10 @@ class test_tree(unittest.TestCase):
     tree = self.process("foo bar (5 6)")
     self.assertEqual(["foo", "bar", ["5", "6"]], tree.elements())
 
+  def test_output_as_string(self):
+    tree = self.process("foo bar (5 6)")
+    self.assertEqual("foo bar (5 6)", tree.to_string())
+
+  def xtest_should_preserve_whitespace(self):
+    self.assertEqual("kind  \t\n(formula)", self.process("kind  \t\n(formula)"))
+
