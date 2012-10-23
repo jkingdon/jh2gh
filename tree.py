@@ -2,13 +2,13 @@ import verify
 
 class Tree:
   def __init__(self, elements):
-    self.elements = elements
+    self._elements = elements
 
   def count(self):
-    return len(self.elements)
+    return len(self._elements)
 
-  def text(self):
-    return self.elements[0]
+  def elements(self):
+    return self._elements
 
 def parse(stream):
   scanner = verify.Scanner(stream)
