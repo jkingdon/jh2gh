@@ -12,3 +12,8 @@ class test_tree(unittest.TestCase):
     tree = self.process("")
     self.assertEqual(0, tree.count())
 
+  def test_atom(self):
+    tree = self.process("frog")
+    self.assertEqual(1, tree.count())
+    self.assertEqual("frog", tree.text())
+
