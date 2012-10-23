@@ -23,3 +23,12 @@ class test_tree(unittest.TestCase):
     self.assertEqual(1, tree.count())
     self.assertEqual([["5", "gherkin", "flavour"]], tree.elements())
 
+  def test_nested(self):
+    tree = self.process("(= (+ (+ a b) c) (+ a (+ b c)))")
+    self.assertEqual([["=", ["+", ["+", "a", "b"], "c"], ["+", "a", ["+", "b", "c"]]]],
+      tree.elements())
+
+  def test_multiple_top_level(self):
+    tree = self.process("foo bar (5 6)")
+    self.assertEqual(["foo", "bar", ["5", "6"]], tree.elements())
+

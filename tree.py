@@ -12,9 +12,11 @@ class Tree:
 
 def parse(stream):
   scanner = verify.Scanner(stream)
-  command = verify.read_sexp(scanner)
   tokens = []
-  if command != None:
-    tokens += [command]
+  while True:
+    expression = verify.read_sexp(scanner)
+    if expression == None:
+      break
+    tokens += [expression]
   return Tree(tokens)
 
