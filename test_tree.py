@@ -37,5 +37,11 @@ class test_tree(unittest.TestCase):
     self.assertEqual("foo bar (5 6)", tree.to_string())
 
   def xtest_should_preserve_whitespace(self):
-    self.assertEqual("kind  \t\n(formula)", self.process("kind  \t\n(formula)"))
+    self.assertEqual("  xyz  \t\n(formula\n)", self.process("  xyz  \t\n(formula\n)").to_string())
+
+  def test_hash_to_end_of_line_is_comment(self):
+    self.assertEqual(["foo"], self.process("  foo # a common metavariable").elements())
+
+  def xtest_preserve_comments(self):
+    self.assertEqual("  foo # bar", self.process("  foo # bar").to_string())
 
