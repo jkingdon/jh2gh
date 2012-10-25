@@ -37,3 +37,11 @@ class test_tree(unittest.TestCase):
     self.assertEqual(["# comment\n", "a", " ", "b", "\n"],
       self.process("# comment\na b"))
 
+  def test_next_token(self):
+    inputString = "token1 "
+    stream = string_stream.StringStream(inputString)
+    tokenizer1 = tokenizer.Tokenizer(stream)
+    self.assertEqual("token1", tokenizer1.next_token())
+    self.assertEqual(" \n", tokenizer1.next_token())
+    self.assertEqual(None, tokenizer1.next_token())
+
