@@ -1,4 +1,3 @@
-import verify
 import tokenizer
 
 class Tree:
@@ -29,9 +28,6 @@ class Tree:
       else:
         result += element
     return result
-#    return ' '.join( list comprehension blah blah blah
-#    with_parentheses = verify.sexp_to_string(self._elements)
-#    return with_parentheses[1:(len(with_parentheses)-1)]
 
 def read_expression(tokenizer1):
     while True:
