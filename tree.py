@@ -6,29 +6,38 @@ class Tree:
     self._elements = elements
 
   def count(self):
-    return len(self._elements)
+    return len(self.elements())
 
   def elements(self):
     result = []
     for element in self._elements:
       if element.__class__ == Tree:
         result += [element.elements()]
+      elif element.isspace() or element.startswith("#"):
+        continue
       else:
         result += [element]
     return result
 
   def to_string(self):
+    result = ''
+    for element in self._elements:
+      if element.__class__ == Tree:
+        result += '('
+        result += element.to_string()
+        result += ')'
+      else:
+        result += element
+    return result
 #    return ' '.join( list comprehension blah blah blah
-    with_parentheses = verify.sexp_to_string(self._elements)
-    return with_parentheses[1:(len(with_parentheses)-1)]
+#    with_parentheses = verify.sexp_to_string(self._elements)
+#    return with_parentheses[1:(len(with_parentheses)-1)]
 
 def read_expression(tokenizer1):
     while True:
         token = tokenizer1.next_token()
         if token == None:
             return None
-        if token.isspace() or token.startswith("#"):
-            continue
         if token == '(':
             result = []
             while True:
@@ -38,7 +47,7 @@ def read_expression(tokenizer1):
                 elif subsexp == None:
                     raise SyntaxError('eof inside sexp')
                 result.append(subsexp)
-            return result
+            return Tree(result)
         else:
             return token
 
