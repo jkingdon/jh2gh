@@ -1,4 +1,5 @@
 import verify
+import tokenizer
 
 class Tree:
   def __init__(self, elements):
@@ -21,15 +22,17 @@ class Tree:
     with_parentheses = verify.sexp_to_string(self._elements)
     return with_parentheses[1:(len(with_parentheses)-1)]
 
-def read_expression(scanner):
+def read_expression(tokenizer1):
     while True:
-        tok = scanner.get_tok()
-        if tok == None:
+        token = tokenizer1.next_token()
+        if token == None:
             return None
-        if tok == '(':
+        if token.isspace() or token.startswith("#"):
+            continue
+        if token == '(':
             result = []
-            while 1:
-                subsexp = read_expression(scanner)
+            while True:
+                subsexp = read_expression(tokenizer1)
                 if subsexp == ')':
                     break
                 elif subsexp == None:
@@ -37,13 +40,13 @@ def read_expression(scanner):
                 result.append(subsexp)
             return result
         else:
-            return tok
+            return token
 
 def parse(stream):
-  scanner = verify.Scanner(stream)
+  tokenizer1 = tokenizer.Tokenizer(stream)
   tokens = []
   while True:
-    expression = read_expression(scanner)
+    expression = read_expression(tokenizer1)
     if expression == None:
       break
     tokens += [expression]
