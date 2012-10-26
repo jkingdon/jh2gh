@@ -15,11 +15,29 @@ class Tree:
     with_parentheses = verify.sexp_to_string(self._elements)
     return with_parentheses[1:(len(with_parentheses)-1)]
 
+def read_expression(scanner):
+    while True:
+        tok = scanner.get_tok()
+        if tok == None:
+            return None
+        if tok == '(':
+            result = []
+            while 1:
+                subsexp = read_expression(scanner)
+                if subsexp == ')':
+                    break
+                elif subsexp == None:
+                    raise SyntaxError('eof inside sexp')
+                result.append(subsexp)
+            return result
+        else:
+            return tok
+
 def parse(stream):
   scanner = verify.Scanner(stream)
   tokens = []
   while True:
-    expression = verify.read_sexp(scanner)
+    expression = read_expression(scanner)
     if expression == None:
       break
     tokens += [expression]
