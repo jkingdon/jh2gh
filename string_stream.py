@@ -5,6 +5,10 @@ class StringStream:
      def readline(self):
           if self.ix >= len(self.lines):
                return ''
+          elif self.ix == len(self.lines) - 1:
+               result = self.lines[self.ix]
+               self.ix += 1
+               return result
           else:
                result = self.lines[self.ix] + '\n'
                self.ix += 1
