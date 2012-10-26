@@ -8,7 +8,13 @@ class Tree:
     return len(self._elements)
 
   def elements(self):
-    return self._elements
+    result = []
+    for element in self._elements:
+      if element.__class__ == Tree:
+        result += [element.elements()]
+      else:
+        result += [element]
+    return result
 
   def to_string(self):
 #    return ' '.join( list comprehension blah blah blah
