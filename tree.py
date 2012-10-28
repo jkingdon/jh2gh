@@ -49,11 +49,11 @@ def read_expression(tokenizer1):
 
 def parse(stream):
   tokenizer1 = tokenizer.Tokenizer(stream)
-  tokens = []
+  expressions = []
   while True:
     expression = read_expression(tokenizer1)
     if expression == None:
       break
-    tokens += [expression]
-  return Tree(tokens)
+    expressions.append(expression)
+  return Tree(expressions)
 
