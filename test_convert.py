@@ -23,24 +23,47 @@ class test_convert(unittest.TestCase):
       "kind (formula)\nvar (formula p)"))
 
   def test_converts_var_to_var_for_kind_variable(self):
-    # Might be kind of nice to clean up the whitespace, but maybe
-    # that isn't needed
+    # Might be kind of nice to clean up the whitespace where we remove
+    # "kind (variable)", but maybe that isn't needed
     self.assertEqual("kind (object)\n \nvar (object x)", self.process(
       "kind (object)\nkind (variable)\nvar (variable x)"))
 
-#  it "can convert a basic stmt" do
-#    pending "not too close to getting this one working yet"
-#    gh = process <<END
-#kind (formula)
-#var (formula p q)
-#term (formula (→ formula formula))
-#stmt (AntecedentIntroduction () () (p → (q → p)))
-#END
-#      gh.should == <<END
-#kind (formula)
-#tvar (formula p q)
-#term (formula (→ p q))
-#stmt (AntecedentIntroduction () () (→ p (→ q p)))
-#END
-#  end
-#end
+  def test_keeps_list_of_symbols_by_kind(self):
+    converter =  convert.Convert()
+    inputString = "var (formula p q)\nvar (formula r)\n"
+    converter.convert(string_stream.StringStream(inputString))
+    self.assertEqual({'formula': ['p', 'q', 'r']}, converter._variables)
+
+  def test_can_assign_symbols_from_list(self):
+    assigner = convert.VariableAssigner({'formula': ['p', 'q', 'r']})
+    self.assertEqual('p', assigner.next_name('formula'))
+    self.assertEqual('q', assigner.next_name('formula'))
+
+  def test_converts_basic_stmt(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (→ formula formula))
+stmt (AntecedentIntroduction () () (→ p (→ q p)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (→ p q))
+stmt (AntecedentIntroduction () () (→ p (→ q p)))
+""", result)
+
+  def xtest_undoes_pseudo_infix(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (→ formula formula))
+stmt (AntecedentIntroduction () () (p → (q → p)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (→ p q))
+stmt (AntecedentIntroduction () () (→ p (→ q p)))
+""", result)
+

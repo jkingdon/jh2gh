@@ -7,6 +7,9 @@ class Tree:
   def count(self):
     return len(self.elements())
 
+  def __len__(self):
+    return len(self.elements())
+
   def elements(self):
     result = []
     for element in self._elements:
