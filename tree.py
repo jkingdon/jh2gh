@@ -11,12 +11,43 @@ class Tree:
     result = []
     for element in self._elements:
       if element.__class__ == Tree:
-        result += [element.elements()]
+        result.append(element.elements())
       elif element.isspace() or element.startswith("#"):
         continue
       else:
-        result += [element]
+        result.append(element)
     return result
+
+  def elements_children_as_trees(self):
+    result = []
+    for element in self._elements:
+      if element.__class__ == Tree:
+        result.append(element)
+      elif element.isspace() or element.startswith("#"):
+        continue
+      else:
+        result.append(element)
+    return result
+
+  def __getitem__(self, index):
+    return self.elements_children_as_trees()[index]
+
+  def __setitem__(self, index, value):
+    non_whitespace = -1
+    j = 0
+    while j < len(self._elements):
+      element = self._elements[j]
+      if element.__class__ == Tree:
+        non_whitespace += 1
+      elif element.isspace() or element.startswith("#"):
+        j += 1
+        continue
+      else:
+        non_whitespace += 1
+      if non_whitespace == index:
+        self._elements[j] = value
+        return
+      j += 1
 
   def to_string(self):
     result = ''
