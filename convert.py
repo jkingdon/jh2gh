@@ -42,3 +42,20 @@ class Convert:
 
     return expressions.to_string()
 
+class Wiki:
+  def read(self, input):
+    result = ''
+    in_proof = False
+    while True:
+      line = input.readline()
+      if line == '':
+        break
+      if line == "</jh>\n":
+        pass #in_proof = False
+      elif in_proof:
+        result += line
+
+      if line == "<jh>\n":
+        in_proof = True
+    return result
+

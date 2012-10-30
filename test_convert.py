@@ -67,3 +67,13 @@ term (formula (→ p q))
 stmt (AntecedentIntroduction () () (→ p (→ q p)))
 """, result)
 
+  def wiki(self, string):
+    return convert.Wiki().read(string_stream.StringStream(string))
+
+  def test_read_wiki_no_proof(self):
+    self.assertEqual("", self.wiki("I\nam a proof\nsite\n"))
+
+  def test_read_wiki_open_jh(self):
+    input = "<jh>\nkind (formula)\n</jh>\n"
+    self.assertEqual("kind (formula)\n", self.wiki(input))
+
