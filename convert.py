@@ -70,9 +70,8 @@ if __name__ == '__main__':
   if len(sys.argv) != 3:
     print >> sys.stderr, 'Usage: JHILBERT-INPUT GHILBERT-OUTPUT'
     exit(1)
-  input = sys.argv[1]
-  output = sys.argv[2]
+  input = open(sys.argv[1], "r")
+  output = open(sys.argv[2], "w")
 
-  result = Wiki().convert(open(input, "r"))
-  print result
+  output.write(Wiki().convert(input))
 
