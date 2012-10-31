@@ -77,3 +77,7 @@ stmt (AntecedentIntroduction () () (→ p (→ q p)))
     input = "<jh>\nkind (formula)\n</jh>\n"
     self.assertEqual("kind (formula)\n", self.wiki(input))
 
+  def test_converts_proofs_in_wiki(self):
+    self.assertEqual("kind (formula)\ntvar (formula p)\n", self.wiki(
+      "<jh>\nkind (formula)\nvar (formula p)\n</jh>\n"))
+

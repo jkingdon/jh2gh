@@ -1,6 +1,7 @@
 import tokenizer
 import tree
 import copy
+import string_stream
 
 class VariableAssigner:
   def __init__(self, variables):
@@ -57,5 +58,5 @@ class Wiki:
 
       if line == "<jh>\n":
         in_proof = True
-    return result
+    return Convert().convert(string_stream.StringStream(result))
 
