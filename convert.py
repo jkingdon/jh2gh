@@ -52,11 +52,15 @@ class Wiki:
       if line == '':
         break
       if line == "</jh>\n":
-        pass #in_proof = False
+        in_proof = False
       elif in_proof:
         result += line
 
       if line == "<jh>\n":
         in_proof = True
-    return Convert().convert(string_stream.StringStream(result))
+    return result
+
+  def convert(self, input):
+    jhilbert = self.read(input)
+    return Convert().convert(string_stream.StringStream(jhilbert))
 
