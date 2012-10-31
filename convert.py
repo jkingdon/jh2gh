@@ -1,3 +1,5 @@
+import sys
+
 import tokenizer
 import tree
 import copy
@@ -63,4 +65,14 @@ class Wiki:
   def convert(self, input):
     jhilbert = self.read(input)
     return Convert().convert(string_stream.StringStream(jhilbert))
+
+if __name__ == '__main__':
+  if len(sys.argv) != 3:
+    print >> sys.stderr, 'Usage: JHILBERT-INPUT GHILBERT-OUTPUT'
+    exit(1)
+  input = sys.argv[1]
+  output = sys.argv[2]
+
+  result = Wiki().convert(open(input, "r"))
+  print result
 
