@@ -53,7 +53,7 @@ term (formula (→ p q))
 stmt (AntecedentIntroduction () () (→ p (→ q p)))
 """, result)
 
-  def xtest_undoes_pseudo_infix(self):
+  def test_undoes_pseudo_infix(self):
     result = self.process("""
 kind (formula)
 var (formula p q)
@@ -65,6 +65,20 @@ kind (formula)
 tvar (formula p q)
 term (formula (→ p q))
 stmt (AntecedentIntroduction () () (→ p (→ q p)))
+""", result)
+
+  def test_undo_pseudo_infix_in_rule(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (→ formula formula))
+stmt (applyModusPonens () (p (p → q)) q)
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (→ p q))
+stmt (applyModusPonens () (p (→ p q)) q)
 """, result)
 
   def wiki(self, string):
