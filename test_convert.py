@@ -81,6 +81,25 @@ term (formula (→ p q))
 stmt (applyModusPonens () (p (→ p q)) q)
 """, result)
 
+  def xtest_turn_def_into_term_and_statement(self):
+    result = self.process("""
+kind (formula)
+kind (number)
+var (number x y)
+term (formula (= number number))
+term (number (double number))
+def ((quadruple x) (double (double x)))
+""")
+    self.assertEqual("""
+kind (formula)
+kind (number)
+tvar (number x y)
+term (formula (= x y))
+term (number (double x))
+term (number (quadruple x))
+stmt (Quadruple () () (= (quadruple x) (double (double x))))
+""", result)
+
   def wiki(self, string):
     return convert.Wiki().read(string_stream.StringStream(string))
 
