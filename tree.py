@@ -11,15 +11,8 @@ class Tree:
     return len(self.elements())
 
   def elements(self):
-    result = []
-    for element in self._elements:
-      if element.__class__ == Tree:
-        result.append(element.elements())
-      elif element.isspace() or element.startswith("#"):
-        continue
-      else:
-        result.append(element)
-    return result
+    return [element.elements() if element.__class__ == Tree else element
+      for element in self.elements_children_as_trees()]
 
   def elements_children_as_trees(self):
     return [element for element in self._elements
