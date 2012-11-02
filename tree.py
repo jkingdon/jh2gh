@@ -22,15 +22,10 @@ class Tree:
     return result
 
   def elements_children_as_trees(self):
-    result = []
-    for element in self._elements:
-      if element.__class__ == Tree:
-        result.append(element)
-      elif element.isspace() or element.startswith("#"):
-        continue
-      else:
-        result.append(element)
-    return result
+    return [element for element in self._elements
+      if element.__class__ == Tree or
+        (not element.isspace() and not element.startswith("#"))
+      ]
 
   def __getitem__(self, index):
     return self.elements_children_as_trees()[index]
