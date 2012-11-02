@@ -4,9 +4,6 @@ class Tree:
   def __init__(self, elements):
     self._elements = elements
 
-  def count(self):
-    return len(self.elements())
-
   def __len__(self):
     return len(self.elements())
 
