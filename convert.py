@@ -61,6 +61,10 @@ class Convert:
 
         for i in xrange(1, len(name_and_arguments)):
           name_and_arguments[i] = assigner.next_name(name_and_arguments[i])
+      elif command == "def":
+        definiendum = arguments[0]
+        definiens = arguments[1]
+        # TODO: convert the definition
 
       self.undo_pseudo_infix(arguments)
 
