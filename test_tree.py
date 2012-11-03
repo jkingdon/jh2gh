@@ -82,3 +82,18 @@ class test_tree(unittest.TestCase):
     tree[2] = "red"
     self.assertEqual("the quick red fox", tree.to_string())
 
+  def test_insert(self):
+    tree = self.process("")
+    tree.insert(0, "foo")
+    self.assertEqual("foo", tree.to_string())
+
+  def test_insert_indexes_do_not_count_whitespace(self):
+    tree = self.process(" foo")
+    tree.insert(1, "bar")
+    self.assertEqual(" foobar", tree.to_string())
+
+  def test_insert_but_not_at_end(self):
+    tree = self.process(" bar")
+    tree.insert(0, "foo")
+    self.assertEquals("foo bar", tree.to_string())
+

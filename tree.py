@@ -17,6 +17,20 @@ class Tree:
         (not element.isspace() and not element.startswith("#"))
       ]
 
+  def raw_index(self, cooked_index):
+    cooked = 0
+    for raw in xrange(len(self._elements)):
+      if cooked == cooked_index:
+        return raw
+      element = self._elements[raw]
+      if (element.__class__ == Tree or
+        (not element.isspace() and not element.startswith("#"))):
+        cooked += 1
+    return len(self._elements)
+
+  def insert(self, index, element):
+    self._elements.insert(self.raw_index(index), element)
+
   def __getitem__(self, index):
     return self.elements_children_as_trees()[index]
 
