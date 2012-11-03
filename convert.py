@@ -15,10 +15,10 @@ class VariableAssigner:
 class Convert:
   def __init__(self):
     self._variables = {}
-    self._term_names = set()
+    self._terms = {}
 
   def store_variables(self, kind, variables):
-    if not self._variables.has_key(kind):
+    if not kind in self._variables:
       self._variables[kind] = []
     self._variables[kind] += variables
 
@@ -26,7 +26,7 @@ class Convert:
     term_index = None
     for i in xrange(0, len(expression)):
       element = expression[i]
-      if element in self._term_names:
+      if element in self._terms:
         term_index = i
       elif element.__class__ == tree.Tree:
         self.undo_pseudo_infix(element)
@@ -57,7 +57,7 @@ class Convert:
         name_and_arguments = arguments[1]
         name = name_and_arguments[0]
 
-        self._term_names.add(name)
+        self._terms[name] = return_type
 
         for i in xrange(1, len(name_and_arguments)):
           name_and_arguments[i] = assigner.next_name(name_and_arguments[i])
