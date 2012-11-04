@@ -81,7 +81,7 @@ term (formula (→ p q))
 stmt (applyModusPonens () (p (→ p q)) q)
 """, result)
 
-  def xtest_turn_def_into_term_and_statement(self):
+  def test_turn_def_into_term_and_statement(self):
     result = self.process("""
 kind (formula)
 kind (number)
@@ -96,8 +96,33 @@ kind (number)
 tvar (number x y)
 term (formula (= x y))
 term (number (double x))
-term (number (quadruple x))
-stmt (Quadruple () () (= (quadruple x) (double (double x))))
+term (number (quadruple x))stmt(Quadruple()()(=(quadruple x)(double (double x))))
+""", result)
+    # This is the better spacing, when we can get the convert to be smarter about whitespace and insertion
+#    self.assertEqual("""
+#kind (formula)
+#kind (number)
+#tvar (number x y)
+#term (formula (= x y))
+#term (number (double x))
+#term (number (quadruple x))
+#stmt (Quadruple () () (= (quadruple x) (double (double x))))
+#""", result)
+
+  def test_convert_definition_of_predicate(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (→ formula formula))
+term (formula (¬ formula))
+def ((∨ p q) ((¬ p) → q))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (→ p q))
+term (formula (¬ p))
+term (formula (∨ p q))stmt(Disjunction()()(↔(∨ p q)(→ (¬ p) q)))
 """, result)
 
   def wiki(self, string):

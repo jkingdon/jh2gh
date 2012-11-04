@@ -1,3 +1,4 @@
+#encoding: utf-8
 import sys
 
 import tokenizer
@@ -36,9 +37,22 @@ class Convert:
         expression[j + 1] = expression[j]
       expression[0] = term
 
+  def capitalize_term(self, term):
+    if term == "∨":
+      return "Disjunction"
+    else:
+      return term.capitalize()
+
+  def equality_operator(self, kind):
+    if kind == "formula":
+      return "↔"
+    else:
+      return '='
+
   def convert(self, input):
     expressions = tree.parse(input)
-    for i in xrange(0, len(expressions), 2):
+    i = 0
+    while i < len(expressions):
       command = expressions[i]
       arguments = expressions[i + 1]
 
@@ -59,14 +73,34 @@ class Convert:
 
         self._terms[name] = return_type
 
-        for i in xrange(1, len(name_and_arguments)):
-          name_and_arguments[i] = assigner.next_name(name_and_arguments[i])
+        for j in xrange(1, len(name_and_arguments)):
+          name_and_arguments[j] = assigner.next_name(name_and_arguments[j])
       elif command == "def":
         definiendum = arguments[0]
-        definiens = arguments[1]
-        # TODO: convert the definition
+        definiens = copy.deepcopy(arguments[1])
+        self.undo_pseudo_infix(definiens)
+        defined_term = definiendum[0]
+        term_type = self._terms[definiens[0]]
+
+        expressions[i] = "term"
+        expressions[i + 1] = tree.Tree(
+          [term_type, ' ', copy.deepcopy(definiendum)])
+
+#        expressions.insert(i + 2, "\n")
+        expressions.insert(i + 2, "stmt")
+        stmt_args = tree.Tree([
+          self.capitalize_term(defined_term),
+          tree.Tree([]),
+          tree.Tree([]),
+          tree.Tree([self.equality_operator(term_type),
+            definiendum, definiens])
+        ])
+        expressions.insert(i + 3, stmt_args)
+
+        i += 3
 
       self.undo_pseudo_infix(arguments)
+      i += 2
 
     return expressions.to_string()
 
