@@ -43,6 +43,12 @@ class Convert:
     else:
       return term.capitalize()
 
+  def term_kind(self, definiens):
+    if definiens[0].__class__ == 'a'.__class__:
+      return self._terms[definiens[0]]
+    else:
+      raise Exception("Cannot figure out kind of " + definiens.to_string())
+
   def equality_operator(self, kind):
     if kind == "formula":
       return "↔"
@@ -80,11 +86,12 @@ class Convert:
         definiens = copy.deepcopy(arguments[1])
         self.undo_pseudo_infix(definiens)
         defined_term = definiendum[0]
-        term_type = self._terms[definiens[0]]
+        term_type = self.term_kind(definiens)
 
         expressions[i] = "term"
         expressions[i + 1] = tree.Tree(
           [term_type, ' ', copy.deepcopy(definiendum)])
+        self._terms[definiendum[0]] = term_type
 
 #        expressions.insert(i + 2, "\n")
         expressions.insert(i + 2, "stmt")

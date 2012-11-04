@@ -141,6 +141,38 @@ term (formula (double-not p))stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
 term (formula (→ p q))
 """, result)
 
+  def test_convert_def_which_relies_on_another_def(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+def ((double-not p) (¬ (¬ p)))
+def ((four-not p) (double-not (double-not p)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (¬ p))
+term (formula (double-not p))stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+term (formula (four-not p))stmt(Four-not()()(↔(four-not p)(double-not (double-not p))))
+""", result)
+
+  def test_undoing_infix_and_defs_which_rely_on_others(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+def ((double-not p) (¬ (¬ p)))
+def ((four-not p) ((p double-not) double-not))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (¬ p))
+term (formula (double-not p))stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+term (formula (four-not p))stmt(Four-not()()(↔(four-not p)(double-not (double-not p))))
+""", result)
+
   def wiki(self, string):
     return convert.Wiki().read(string_stream.StringStream(string))
 
