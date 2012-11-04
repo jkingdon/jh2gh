@@ -125,6 +125,22 @@ term (formula (¬ p))
 term (formula (∨ p q))stmt(Disjunction()()(↔(∨ p q)(→ (¬ p) q)))
 """, result)
 
+  def test_def_is_not_the_last_thing(self):
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+def ((double-not p) (¬ (¬ p)))
+term (formula (→ formula formula))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (¬ p))
+term (formula (double-not p))stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+term (formula (→ p q))
+""", result)
+
   def wiki(self, string):
     return convert.Wiki().read(string_stream.StringStream(string))
 

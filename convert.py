@@ -97,7 +97,7 @@ class Convert:
         ])
         expressions.insert(i + 3, stmt_args)
 
-        i += 3
+        i += 2
 
       self.undo_pseudo_infix(arguments)
       i += 2
