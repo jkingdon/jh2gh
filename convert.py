@@ -50,7 +50,7 @@ class Convert:
       raise Exception("Cannot figure out kind of " + definiens.to_string())
 
   def equality_operator(self, kind):
-    if kind == "formula":
+    if kind == "formula" or kind == "wff":
       return "↔"
     else:
       return '='

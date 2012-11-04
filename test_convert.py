@@ -125,6 +125,20 @@ term (formula (¬ p))
 term (formula (∨ p q))stmt(Disjunction()()(↔(∨ p q)(→ (¬ p) q)))
 """, result)
 
+  def test_handles_wff_like_formula(self):
+    result = self.process("""
+kind (wff)
+var (wff p q)
+term (wff (¬ wff))
+def ((single-not p) (¬ p))
+""")
+    self.assertEqual("""
+kind (wff)
+tvar (wff p q)
+term (wff (¬ p))
+term (wff (single-not p))stmt(Single-not()()(↔(single-not p)(¬ p)))
+""", result)
+
   def test_def_is_not_the_last_thing(self):
     result = self.process("""
 kind (formula)
