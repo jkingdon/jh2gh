@@ -38,8 +38,9 @@ class Convert:
       expression[0] = term
 
   def capitalize_term(self, term):
-    if term == "∨":
-      return "Disjunction"
+    preset_names = {'∨': 'Disjunction'}
+    if preset_names.has_key(term):
+      return preset_names[term]
     else:
       return term.capitalize()
 
