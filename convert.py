@@ -38,7 +38,13 @@ class Convert:
       expression[0] = term
 
   def capitalize_term(self, term):
-    preset_names = {'∨': 'Disjunction'}
+    preset_names = {
+      '∨': 'Disjunction',
+      '∧': 'Conjunction',
+      '↔': 'Biconditional',
+      '→': 'Implication',
+      '¬': 'Negation'
+    }
     if preset_names.has_key(term):
       return preset_names[term]
     else:
