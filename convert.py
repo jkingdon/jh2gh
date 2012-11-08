@@ -100,18 +100,18 @@ class Convert:
           [term_type, ' ', copy.deepcopy(definiendum)])
         self._terms[definiendum[0]] = term_type
 
-#        expressions.insert(i + 2, "\n")
-        expressions.insert(i + 2, "stmt")
-        stmt_args = tree.Tree([
-          self.capitalize_term(defined_term),
-          tree.Tree([]),
-          tree.Tree([]),
-          tree.Tree([self.equality_operator(term_type),
-            definiendum, definiens])
-        ])
-        expressions.insert(i + 3, stmt_args)
+        if not (defined_term in ["→", "∧", "↔"]):
+          expressions.insert(i + 2, "stmt")
+          stmt_args = tree.Tree([
+            self.capitalize_term(defined_term),
+            tree.Tree([]),
+            tree.Tree([]),
+            tree.Tree([self.equality_operator(term_type),
+              definiendum, definiens])
+          ])
+          expressions.insert(i + 3, stmt_args)
 
-        i += 2
+          i += 2
 
       self.undo_pseudo_infix(arguments)
       i += 2

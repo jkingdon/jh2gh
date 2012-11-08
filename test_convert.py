@@ -187,6 +187,29 @@ term (formula (double-not p))stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
 term (formula (four-not p))stmt(Four-not()()(↔(four-not p)(double-not (double-not p))))
 """, result)
 
+  def test_propositional_logic_is_special_omit_defs_for_now(self):
+    # The question here is how Principia handles definitions,
+    # and how we can translate that (hopefully without having to
+    # change it hugely). For now, we kind of punt.
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+term (formula (∨ formula formula))
+def ((→ p q) ((¬ p) ∨ q))
+def ((∧ p q) (¬ ((¬ p) ∨ (¬ q))))
+def ((↔ p q) ((p → q) ∧ (q → p)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (¬ p))
+term (formula (∨ p q))
+term (formula (→ p q))
+term (formula (∧ p q))
+term (formula (↔ p q))
+""", result)
+
   def wiki(self, string):
     return convert.Wiki().read(string_stream.StringStream(string))
 
