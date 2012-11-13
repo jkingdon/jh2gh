@@ -28,8 +28,9 @@ class Tree:
         cooked += 1
     return len(self._elements)
 
-  def insert(self, index, element):
-    self._elements.insert(self.raw_index(index), element)
+  def insert(self, index, new_elements):
+    raw_index = self.raw_index(index)
+    self._elements[raw_index:raw_index] = new_elements
 
   def __getitem__(self, index):
     return self.elements_children_as_trees()[index]

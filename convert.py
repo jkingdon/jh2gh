@@ -114,7 +114,7 @@ class Convert:
         self._terms[definiendum[0]] = term_type
 
         if not (defined_term in ["→", "∧", "↔"]):
-          expressions.insert(i + 2, "stmt")
+          expressions.insert(i + 2, ["stmt"])
           stmt_args = tree.Tree([
             self.capitalize_term(defined_term),
             tree.Tree([]),
@@ -122,7 +122,7 @@ class Convert:
             tree.Tree([self.equality_operator(term_type),
               definiendum, definiens])
           ])
-          expressions.insert(i + 3, stmt_args)
+          expressions.insert(i + 3, [stmt_args])
 
           i += 2
       elif command == "thm":
