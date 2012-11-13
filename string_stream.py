@@ -14,4 +14,6 @@ class StringStream:
                self.ix += 1
                return result
 
-
+class Opener:
+  def set_file(self, name, stream):
+    pass

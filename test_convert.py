@@ -231,3 +231,41 @@ term (formula (↔ p q))
     self.assertEqual("kind (formula)\ntvar (formula p)\n", self.wiki_convert(
       "<jh>\nkind (formula)\nvar (formula p)\n</jh>\n"))
 
+  def xtest_import(self):
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/i/Principia Mathematica propositional logic", string_stream.StringStream("kind (formula) term (formula (¬ formula))"))
+    result = converter.convert(string_stream.StringStream("""
+import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
+var (formula p)
+thm (foo () ((H (p ¬))) (p ¬) (
+        H
+))
+"""))
+    self.assertEqual("""
+import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
+thm (foo () (H (¬ p)) (¬ p)
+        H
+)
+""", result)
+
+  # Not a realistic test, in that kind is interface-only and thm
+  # is proof-module-only.
+  def xtest_removes_parentheses_in_thm(self):
+    result = self.process("""
+kind (formula)
+var (formula p)
+term (formula (¬ formula))
+thm (foo ((H (p ¬))) (p ¬) (
+  H
+))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p)
+term (formula (¬ p))
+thm (foo (H (¬ p)) (¬ p)
+  H
+)
+""", result)

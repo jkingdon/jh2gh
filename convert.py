@@ -11,7 +11,12 @@ class VariableAssigner:
     self._variables = copy.deepcopy(variables)
 
   def next_name(self, kind):
-    return self._variables[kind].pop(0)
+    if not kind in self._variables:
+      raise Exception("Need variables for kind " + kind)
+    elif len(self._variables[kind]) == 0:
+      raise Exception("Ran out of variables for kind " + kind)
+    else:
+      return self._variables[kind].pop(0)
 
 class Convert:
   def __init__(self):
@@ -78,6 +83,14 @@ class Convert:
         else:
           expressions[i] = "tvar"
         self.store_variables(arguments[0], arguments[1:])
+# Figure out how to test-drive this. Need a mock or some other way of
+# handling file access.
+#      elif command == "import":
+#        name = arguments[0]
+#        underscored_name = arguments[1]
+#        params = arguments[2]
+#        prefix = arguments[3]
+#        self.process_import(name, underscored_name, params, prefix)
       elif command == "term":
         assigner = VariableAssigner(self._variables)
         return_type = arguments[0]
@@ -112,11 +125,16 @@ class Convert:
           expressions.insert(i + 3, stmt_args)
 
           i += 2
+      elif command == "thm":
+        pass
 
       self.undo_pseudo_infix(arguments)
       i += 2
 
     return expressions.to_string()
+
+  def set_opener(self, opener):
+    self._opener = opener
 
 class Wiki:
   def read(self, input):
