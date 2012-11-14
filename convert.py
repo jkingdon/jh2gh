@@ -116,12 +116,19 @@ class Convert:
         if not (defined_term in ["→", "∧", "↔"]):
           stmt_args = tree.Tree([
             self.capitalize_term(defined_term),
+            " ",
             tree.Tree([]),
+            " ",
             tree.Tree([]),
-            tree.Tree([self.equality_operator(term_type),
-              definiendum, definiens])
+            " ",
+            tree.Tree([
+              self.equality_operator(term_type),
+              " ",
+              definiendum,
+              " ",
+              definiens])
           ])
-          expressions.insert(i + 2, ["\n", "stmt", stmt_args])
+          expressions.insert(i + 2, ["\n", "stmt", " ", stmt_args])
 
           i += 2
       elif command == "thm":

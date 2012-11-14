@@ -97,18 +97,8 @@ tvar (number x y)
 term (formula (= x y))
 term (number (double x))
 term (number (quadruple x))
-stmt(Quadruple()()(=(quadruple x)(double (double x))))
+stmt (Quadruple () () (= (quadruple x) (double (double x))))
 """, result)
-    # This is the better spacing, when we can get the convert to be smarter about whitespace and insertion
-#    self.assertEqual("""
-#kind (formula)
-#kind (number)
-#tvar (number x y)
-#term (formula (= x y))
-#term (number (double x))
-#term (number (quadruple x))
-#stmt (Quadruple () () (= (quadruple x) (double (double x))))
-#""", result)
 
   def test_convert_definition_of_predicate(self):
     result = self.process("""
@@ -124,7 +114,7 @@ tvar (formula p q)
 term (formula (→ p q))
 term (formula (¬ p))
 term (formula (∨ p q))
-stmt(Disjunction()()(↔(∨ p q)(→ (¬ p) q)))
+stmt (Disjunction () () (↔ (∨ p q) (→ (¬ p) q)))
 """, result)
 
   def test_handles_wff_like_formula(self):
@@ -139,7 +129,7 @@ kind (wff)
 tvar (wff p q)
 term (wff (¬ p))
 term (wff (single-not p))
-stmt(Single-not()()(↔(single-not p)(¬ p)))
+stmt (Single-not () () (↔ (single-not p) (¬ p)))
 """, result)
 
   def test_def_is_not_the_last_thing(self):
@@ -155,7 +145,7 @@ kind (formula)
 tvar (formula p q)
 term (formula (¬ p))
 term (formula (double-not p))
-stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+stmt (Double-not () () (↔ (double-not p) (¬ (¬ p))))
 term (formula (→ p q))
 """, result)
 
@@ -172,9 +162,9 @@ kind (formula)
 tvar (formula p q)
 term (formula (¬ p))
 term (formula (double-not p))
-stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+stmt (Double-not () () (↔ (double-not p) (¬ (¬ p))))
 term (formula (four-not p))
-stmt(Four-not()()(↔(four-not p)(double-not (double-not p))))
+stmt (Four-not () () (↔ (four-not p) (double-not (double-not p))))
 """, result)
 
   def test_undoing_infix_and_defs_which_rely_on_others(self):
@@ -190,9 +180,9 @@ kind (formula)
 tvar (formula p q)
 term (formula (¬ p))
 term (formula (double-not p))
-stmt(Double-not()()(↔(double-not p)(¬ (¬ p))))
+stmt (Double-not () () (↔ (double-not p) (¬ (¬ p))))
 term (formula (four-not p))
-stmt(Four-not()()(↔(four-not p)(double-not (double-not p))))
+stmt (Four-not () () (↔ (four-not p) (double-not (double-not p))))
 """, result)
 
   def test_propositional_logic_is_special_omit_defs_for_now(self):
