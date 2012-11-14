@@ -121,7 +121,7 @@ class Convert:
             tree.Tree([self.equality_operator(term_type),
               definiendum, definiens])
           ])
-          expressions.insert(i + 2, ["stmt", stmt_args])
+          expressions.insert(i + 2, ["\n", "stmt", stmt_args])
 
           i += 2
       elif command == "thm":
