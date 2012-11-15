@@ -5,11 +5,7 @@ class Tree:
     self._elements = elements
 
   def __len__(self):
-    return len(self.elements())
-
-  def elements(self):
-    return [element.elements() if element.__class__ == Tree else element
-      for element in self.elements_children_as_trees()]
+    return len(self.elements_children_as_trees())
 
   def elements_children_as_trees(self):
     return [element for element in self._elements

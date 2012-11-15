@@ -16,26 +16,34 @@ class test_tree(unittest.TestCase):
   def test_empty(self):
     tree = self.process("")
     self.assertEqual(0, len(tree))
-    self.assertEqual([], tree.elements())
+    self.assertEqual([], tree.elements_children_as_trees())
 
   def test_atom(self):
     tree = self.process("frog")
     self.assertEqual(1, len(tree))
-    self.assertEqual(["frog"], tree.elements())
+    self.assertEqual(["frog"], tree.elements_children_as_trees())
 
   def test_parenthesized_expression(self):
     tree = self.process("(5 gherkin flavour)")
     self.assertEqual(1, len(tree))
-    self.assertEqual([["5", "gherkin", "flavour"]], tree.elements())
+    self.assertEqual(["5", "gherkin", "flavour"],
+      tree[0].elements_children_as_trees())
 
   def test_nested(self):
+    tree = self.process("(- (+ a b))")
+    elements = tree.elements_children_as_trees()[0]
+    self.assertEqual("-", elements[0])
+    self.assertEqual(["+", "a", "b"], elements[1].elements_children_as_trees())
+
+  def test_deeply_nested(self):
     tree = self.process("(= (+ (+ a b) c) (+ a (+ b c)))")
-    self.assertEqual([["=", ["+", ["+", "a", "b"], "c"], ["+", "a", ["+", "b", "c"]]]],
-      tree.elements())
+    self.assertEqual("(= (+ (+ a b) c) (+ a (+ b c)))", tree.to_string())
 
   def test_multiple_top_level(self):
     tree = self.process("foo bar (5 6)")
-    self.assertEqual(["foo", "bar", ["5", "6"]], tree.elements())
+    self.assertEqual("foo", tree[0])
+    self.assertEqual("bar", tree[1])
+    self.assertEqual("5 6", tree[2].to_string())
 
   def test_output_as_string(self):
     tree = self.process("foo bar (5 6)\n")
@@ -61,7 +69,8 @@ class test_tree(unittest.TestCase):
     self.assertEqual("  xyz  \t\n(formula\n)", self.process("  xyz  \t\n(formula\n)").to_string())
 
   def test_hash_to_end_of_line_is_comment(self):
-    self.assertEqual(["foo"], self.process("  foo # a common metavariable").elements())
+    tree = self.process("  foo # a common metavariable")
+    self.assertEqual(["foo"], tree.elements_children_as_trees())
 
   def test_preserve_comments(self):
     self.assertEqual("  foo # bar", self.process("  foo # bar").to_string())
