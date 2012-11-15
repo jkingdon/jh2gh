@@ -13,6 +13,9 @@ class Tree:
         (not element.isspace() and not element.startswith("#"))
       ]
 
+  def elements_including_whitespace(self):
+    return self._elements[:]
+
   def raw_index(self, cooked_index):
     cooked = 0
     for raw in xrange(len(self._elements)):

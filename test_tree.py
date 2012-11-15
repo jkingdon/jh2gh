@@ -75,6 +75,16 @@ class test_tree(unittest.TestCase):
   def test_preserve_comments(self):
     self.assertEqual("  foo # bar", self.process("  foo # bar").to_string())
 
+  def test_elements_including_whitespace(self):
+    self.assertEqual(["  ", "foo", " ", "# bar"],
+      self.process("  foo # bar").elements_including_whitespace())
+
+  def test_cannot_modify_via_elements_including_whitespace(self):
+    tree = self.process("foo")
+    elements = tree.elements_including_whitespace()
+    elements[0] = "bar"
+    self.assertEqual("foo", tree.to_string())
+
   def test_index_children(self):
     array = self.read_expression("(first second)")
     self.assertEqual("first", array[0])
