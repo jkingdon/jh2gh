@@ -249,7 +249,7 @@ thm (foo () (H (¬ p)) (¬ p)
 """, result)
 
   # Not a realistic test, in that kind is interface-only and thm
-  # is proof-module-only.
+  # is proof-module-only. But we are a convert, not a verifier, so that is OK.
   def test_removes_parentheses_in_thm(self):
     result = self.process("""
 kind (formula)
@@ -260,20 +260,14 @@ thm (foo () ((H (p ¬))) (p ¬) (
 ))
 """)
 
-# TODO: This is correct, note hypothesis deparen and lack of space before last ')'
-#    self.assertEqual("""
-#kind (formula)
-#tvar (formula p)
-#term (formula (¬ p))
-#thm (foo () (H (¬ p)) (¬ p)
-#  H
-#)
-#""", result)
+    # The space before the last ')' is the one which was before the proof in jhilbert.
+    # Perhaps nice to tidy that up, but for now don't worry about it.
     self.assertEqual("""
 kind (formula)
 tvar (formula p)
 term (formula (¬ p))
-thm (foo () ((H (¬ p))) (¬ p)
+thm (foo () (H (¬ p)) (¬ p)
   H
  )
 """, result)
+

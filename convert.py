@@ -141,6 +141,18 @@ class Convert:
         arguments[4] = ''
         arguments.insert(4, proof.elements_including_whitespace())
 
+        new_hypotheses = []
+        prefix = ""
+        for h in hypotheses:
+          name = h[0]
+          expression = h[1]
+          new_hypotheses.append(prefix)
+          new_hypotheses.append(name)
+          new_hypotheses.append(" ")
+          new_hypotheses.append(expression)
+          prefix = " "
+        arguments[2] = tree.Tree(new_hypotheses)
+
       self.undo_pseudo_infix(arguments)
       i += 2
 
