@@ -132,7 +132,14 @@ class Convert:
 
           i += 2
       elif command == "thm":
-        pass
+        name = arguments[0]
+        distinctness_constraints = arguments[1]
+        hypotheses = arguments[2]
+        conclusion = arguments[3]
+        proof = arguments[4]
+
+        arguments[4] = ''
+        arguments.insert(4, proof.elements_including_whitespace())
 
       self.undo_pseudo_infix(arguments)
       i += 2
