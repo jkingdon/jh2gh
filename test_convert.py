@@ -253,6 +253,11 @@ thm (foo () (H (¬ p)) (¬ p)
     self.assertEqual("Main/R/e/l/Relations", converter.convert_filename(
       "Relations"))
 
+  def test_convert_filename_interface(self):
+    converter = convert.Convert()
+    self.assertEqual("Interface/T/r/i/Trigonometry", converter.convert_filename(
+      "Interface:Trigonometry"))
+
   # Not a realistic test, in that kind is interface-only and thm
   # is proof-module-only. But we are a convert, not a verifier, so that is OK.
   def test_removes_parentheses_in_thm(self):

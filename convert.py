@@ -168,8 +168,15 @@ class Convert:
     filesystem_name = self.convert_filename(underscored_name)
 
   def convert_filename(self, underscored_name):
-    return ("Main/" + underscored_name[0] + "/" + underscored_name[1] + "/" +
-      underscored_name[2] + "/" + underscored_name)
+    components = underscored_name.split(":")
+    if len(components) == 1:
+      namespace = "Main"
+      name = underscored_name
+    else:
+      namespace, name = components
+
+    return (namespace + "/" + name[0] + "/" + name[1] + "/" +
+      name[2] + "/" + name)
 
 class Wiki:
   def read(self, input):
