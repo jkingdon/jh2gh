@@ -18,10 +18,15 @@ class VariableAssigner:
     else:
       return self._variables[kind].pop(0)
 
+class FileOpener:
+  def open_file(self, name):
+    return open(name)
+
 class Convert:
   def __init__(self):
     self._variables = {}
     self._terms = {}
+    self._opener = FileOpener()
 
   def store_variables(self, kind, variables):
     if not kind in self._variables:
@@ -83,14 +88,12 @@ class Convert:
         else:
           expressions[i] = "tvar"
         self.store_variables(arguments[0], arguments[1:])
-# Figure out how to test-drive this. Need a mock or some other way of
-# handling file access.
-#      elif command == "import":
-#        name = arguments[0]
-#        underscored_name = arguments[1]
-#        params = arguments[2]
-#        prefix = arguments[3]
-#        self.process_import(name, underscored_name, params, prefix)
+      elif command == "import":
+        name = arguments[0]
+        underscored_name = arguments[1]
+        params = arguments[2]
+        prefix = arguments[3]
+        self.process_import(name, underscored_name, params, prefix)
       elif command == "term":
         assigner = VariableAssigner(self._variables)
         return_type = arguments[0]
@@ -160,6 +163,13 @@ class Convert:
 
   def set_opener(self, opener):
     self._opener = opener
+
+  def process_import(self, name, underscored_name, params, prefix):
+    filesystem_name = self.convert_filename(underscored_name)
+
+  def convert_filename(self, underscored_name):
+    return ("Main/" + underscored_name[0] + "/" + underscored_name[1] + "/" +
+      underscored_name[2] + "/" + underscored_name)
 
 class Wiki:
   def read(self, input):

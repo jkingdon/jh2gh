@@ -15,5 +15,12 @@ class StringStream:
                return result
 
 class Opener:
+  def __init__(self):
+    self._files = {}
+
   def set_file(self, name, stream):
-    pass
+    self._files[name] = stream
+
+  def open_file(self, name):
+    return self._files[name]
+
