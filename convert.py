@@ -175,6 +175,8 @@ class Convert:
     else:
       namespace, name = components
 
+    name = name.replace("_", " ")
+
     return (namespace + "/" + name[0] + "/" + name[1] + "/" +
       name[2] + "/" + name)
 
