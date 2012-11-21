@@ -166,6 +166,8 @@ class Convert:
 
   def process_import(self, name, underscored_name, params, prefix):
     filesystem_name = self.convert_filename(underscored_name)
+    stream = self._opener.open_file(filesystem_name)
+    self.convert(stream)
 
   def convert_filename(self, underscored_name):
     components = underscored_name.split(":")

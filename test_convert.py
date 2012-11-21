@@ -229,11 +229,15 @@ term (formula (↔ p q))
     self.assertEqual("kind (formula)\ntvar (formula p)\n", self.wiki_convert(
       "<jh>\nkind (formula)\nvar (formula p)\n</jh>\n"))
 
-  def xtest_import(self):
+  def test_import(self):
     converter = convert.Convert()
     opener = string_stream.Opener()
     converter.set_opener(opener)
-    opener.set_file("Interface/P/r/i/Principia Mathematica propositional logic", string_stream.StringStream("kind (formula) term (formula (¬ formula))"))
+    opener.set_file("Interface/P/r/i/Principia Mathematica propositional logic", string_stream.StringStream("""
+kind (formula)
+var (formula pp)
+term (formula (¬ formula))
+"""))
     result = converter.convert(string_stream.StringStream("""
 import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
 var (formula p)
@@ -243,9 +247,10 @@ thm (foo () ((H (p ¬))) (p ¬) (
 """))
     self.assertEqual("""
 import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
+tvar (formula p)
 thm (foo () (H (¬ p)) (¬ p)
         H
-)
+ )
 """, result)
 
   def test_convert_filename_main(self):
