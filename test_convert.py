@@ -81,6 +81,20 @@ term (formula (→ p q))
 stmt (applyModusPonens () (p (→ p q)) q)
 """, result)
 
+  def test_undo_pseudo_infix_with_two_preceding_terms(self):
+    result = self.process("""
+kind (foo)
+var (foo p q r s)
+term (foo (≡ foo foo foo foo))
+stmt (sss () (p q ≡ r s) (q p ≡ s r))
+""")
+    self.assertEqual("""
+kind (foo)
+tvar (foo p q r s)
+term (foo (≡ p q r s))
+stmt (sss () (≡ p q r s) (≡ q p s r))
+""", result)
+
   def test_turn_def_into_term_and_statement(self):
     result = self.process("""
 kind (formula)

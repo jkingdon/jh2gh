@@ -43,7 +43,7 @@ class Convert:
         self.undo_pseudo_infix(element)
     if term_index != None:
       term = expression[term_index]
-      for j in xrange(term_index):
+      for j in xrange(term_index - 1, -1, -1):
         expression[j + 1] = expression[j]
       expression[0] = term
 
