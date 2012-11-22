@@ -92,11 +92,7 @@ class Convert:
           expressions[i] = "tvar"
         self.store_variables(arguments[0], arguments[1:])
       elif command == "import":
-        name = arguments[0]
-        underscored_name = arguments[1]
-        params = arguments[2]
-        prefix = arguments[3]
-        self.process_import(name, underscored_name, params, prefix)
+        self.process_import(arguments)
       elif command == "term":
         assigner = VariableAssigner(self._variables)
         return_type = arguments[0]
@@ -167,7 +163,15 @@ class Convert:
   def set_opener(self, opener):
     self._opener = opener
 
-  def process_import(self, name, underscored_name, params, prefix):
+  def process_import(self, arguments):
+    name = arguments[0]
+    underscored_name = arguments[1]
+    params = arguments[2]
+    prefix = arguments[3]
+
+    if prefix.__class__ == tree.Tree and len(prefix) == 0:
+      arguments[3] = '""'
+
     filesystem_name = self.convert_filename(underscored_name)
     stream = self._opener.open_file(filesystem_name)
     jhilbert = Wiki().read(stream)

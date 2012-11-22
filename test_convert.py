@@ -294,7 +294,7 @@ thm (foo () ((H (p ¬))) (p ¬) (
 ))
 """))
     self.assertEqual("""
-import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
+import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () "")
 tvar (formula p)
 thm (foo () (H (¬ p)) (¬ p)
         H
