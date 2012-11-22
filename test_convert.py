@@ -95,6 +95,37 @@ term (foo (≡ p q r s))
 stmt (sss () (≡ p q r s) (≡ q p s r))
 """, result)
 
+  def test_undo_pseudo_infix_and_whitespace(self):
+    # exactly what happens to the whitespace might be corner-casey, but
+    # we at least want things not to blow up and not eat comments (if there are any)
+    result = self.process("""
+kind (formula)
+var (formula p q)
+term (formula (→ formula formula))
+stmt (AntecedentIntroduction () () (#beforep
+p #afterp
+→ #afterarrow
+( #afterparen
+q #afterq
+→ #afternestedarrow
+p #afternestedp
+)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (→ p q))
+stmt (AntecedentIntroduction () () (#beforep
+→ #afterp
+p #afterarrow
+( #afterparen
+→ #afterq
+q #afternestedarrow
+p #afternestedp
+)))
+""", result)
+
+
   def test_turn_def_into_term_and_statement(self):
     result = self.process("""
 kind (formula)
