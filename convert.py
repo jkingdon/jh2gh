@@ -64,7 +64,7 @@ class Convert:
     if definiens[0].__class__ == 'a'.__class__:
       return self._terms[definiens[0]]
     else:
-      raise Exception("Cannot figure out kind of " + definiens.to_string())
+      raise Exception("Cannot figure out kind of " + str(definiens))
 
   def equality_operator(self, kind):
     if kind == "formula" or kind == "wff":
@@ -159,7 +159,7 @@ class Convert:
       self.undo_pseudo_infix(arguments)
       i += 2
 
-    return expressions.to_string()
+    return repr(expressions)
 
   def set_opener(self, opener):
     self._opener = opener

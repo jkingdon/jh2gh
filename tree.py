@@ -51,12 +51,12 @@ class Tree:
         return
       j += 1
 
-  def to_string(self):
+  def __repr__(self):
     result = ''
     for element in self._elements:
       if element.__class__ == Tree:
         result += '('
-        result += element.to_string()
+        result += repr(element)
         result += ')'
       else:
         result += element
