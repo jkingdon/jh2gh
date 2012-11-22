@@ -34,6 +34,9 @@ class Convert:
     self._variables[kind] += variables
 
   def undo_pseudo_infix(self, expression):
+    if expression.__class__ != tree.Tree:
+      raise Exception("expected tree, got" + str(expression.__class__))
+
     term_index = None
     for i in xrange(0, len(expression)):
       element = expression[i]
@@ -167,7 +170,8 @@ class Convert:
   def process_import(self, name, underscored_name, params, prefix):
     filesystem_name = self.convert_filename(underscored_name)
     stream = self._opener.open_file(filesystem_name)
-    self.convert(stream)
+    jhilbert = Wiki().read(stream)
+    self.convert(string_stream.StringStream(jhilbert))
 
   def convert_filename(self, underscored_name):
     components = underscored_name.split(":")

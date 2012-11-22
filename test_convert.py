@@ -279,9 +279,12 @@ term (formula (↔ p q))
     opener = string_stream.Opener()
     converter.set_opener(opener)
     opener.set_file("Interface/P/r/i/Principia Mathematica propositional logic", string_stream.StringStream("""
+thm (x y z) (do not try to parse me)
+<jh>
 kind (formula)
 var (formula pp)
 term (formula (¬ formula))
+</jh>
 """))
     result = converter.convert(string_stream.StringStream("""
 import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () ())
