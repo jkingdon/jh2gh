@@ -294,7 +294,7 @@ thm (foo () ((H (p ¬))) (p ¬) (
 ))
 """))
     self.assertEqual("""
-import (PRINCIPIA Interface:Principia_Mathematica_propositional_logic () "")
+import (PRINCIPIA Principia_Mathematica_propositional_logic.ghi () "")
 tvar (formula p)
 thm (foo () (H (¬ p)) (¬ p)
         H
@@ -318,7 +318,7 @@ thm (foo () (H (¬ p)) (¬ p)
 
   def test_ghilbert_filename(self):
     converter = convert.Convert()
-    self.assertEqual("Real number axioms.ghi", converter.ghilbert_filename(
+    self.assertEqual("Real_number_axioms.ghi", converter.ghilbert_filename(
       "Interface:Real_number_axioms"))
 
   def test_ghilbert_filename_main(self):
@@ -327,7 +327,7 @@ thm (foo () (H (¬ p)) (¬ p)
       "Relations"))
 
   # Not a realistic test, in that kind is interface-only and thm
-  # is proof-module-only. But we are a convert, not a verifier, so that is OK.
+  # is proof-module-only. But we are a converter, not a verifier, so that is OK.
   def test_removes_parentheses_in_thm(self):
     result = self.process("""
 kind (formula)

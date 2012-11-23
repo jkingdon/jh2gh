@@ -77,11 +77,11 @@ class Convert:
 
   def convert(self, input):
     expressions = tree.parse(input)
-    try:
-      self.convert_tree(expressions)
-    except:
-      print "Got an exception"
-      print repr(expressions)
+#    try:
+    self.convert_tree(expressions)
+#    except:
+#      print "Got an exception"
+#      print repr(expressions)
     return repr(expressions)
 
   def convert_tree(self, expressions):
@@ -177,6 +177,7 @@ class Convert:
 
     if prefix.__class__ == tree.Tree and len(prefix) == 0:
       arguments[3] = '""'
+    arguments[1] = self.ghilbert_filename(underscored_name)
 
     filesystem_name = self.convert_filename(underscored_name)
     stream = self._opener.open_file(filesystem_name)
@@ -185,6 +186,7 @@ class Convert:
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
+    name = name.replace("_", " ")
     return (namespace + "/" + name[0] + "/" + name[1] + "/" +
       name[2] + "/" + name)
 
@@ -206,7 +208,6 @@ class Convert:
     else:
       namespace, name = components
 
-    name = name.replace("_", " ")
     return [namespace, name]
 
 class Wiki:
@@ -231,11 +232,14 @@ class Wiki:
     return Convert().convert(string_stream.StringStream(jhilbert))
 
 if __name__ == '__main__':
-  if len(sys.argv) != 3:
-    print >> sys.stderr, 'Usage: JHILBERT-INPUT GHILBERT-OUTPUT'
+  if len(sys.argv) != 2:
+    print >> sys.stderr, 'Usage: python convert.py UNDERSCORED-NAME'
+    print >> sys.stderr, '  Run it from the wikiproofs directory.'
+    print >> sys.stderr, '  UNDERSCORED-NAME is the name as specified in wikiproofs, e.g. Interface:Set_theory'
     exit(1)
-  input = open(sys.argv[1], "r")
-  output = open(sys.argv[2], "w")
+  underscored_name = sys.argv[1]
+  input = open(Convert().convert_filename(underscored_name), "r")
+  output = open("ghilbert/" + Convert().ghilbert_filename(underscored_name), "w")
 
   output.write(Wiki().convert(input))
 
