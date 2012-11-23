@@ -77,7 +77,11 @@ class Convert:
 
   def convert(self, input):
     expressions = tree.parse(input)
-    self.convert_tree(expressions)
+    try:
+      self.convert_tree(expressions)
+    except:
+      print "Got an exception"
+      print repr(expressions)
     return repr(expressions)
 
   def convert_tree(self, expressions):
@@ -180,6 +184,21 @@ class Convert:
     self.convert(string_stream.StringStream(jhilbert))
 
   def convert_filename(self, underscored_name):
+    namespace, name = self.split_filename(underscored_name)
+    return (namespace + "/" + name[0] + "/" + name[1] + "/" +
+      name[2] + "/" + name)
+
+  def ghilbert_filename(self, underscored_name):
+    namespace, name = self.split_filename(underscored_name)
+    if namespace == 'Main':
+      suffix = ".gh"
+    elif namespace == 'Interface':
+      suffix = ".ghi"
+    else:
+      raise Exception("Don't know how to convert namespace " + namespace)
+    return name + suffix;
+
+  def split_filename(self, underscored_name):
     components = underscored_name.split(":")
     if len(components) == 1:
       namespace = "Main"
@@ -188,9 +207,7 @@ class Convert:
       namespace, name = components
 
     name = name.replace("_", " ")
-
-    return (namespace + "/" + name[0] + "/" + name[1] + "/" +
-      name[2] + "/" + name)
+    return [namespace, name]
 
 class Wiki:
   def read(self, input):

@@ -316,6 +316,16 @@ thm (foo () (H (¬ p)) (¬ p)
     self.assertEqual("Interface/R/e/a/Real number axioms", converter.convert_filename(
       "Interface:Real_number_axioms"))
 
+  def test_ghilbert_filename(self):
+    converter = convert.Convert()
+    self.assertEqual("Real number axioms.ghi", converter.ghilbert_filename(
+      "Interface:Real_number_axioms"))
+
+  def test_ghilbert_filename_main(self):
+    converter = convert.Convert()
+    self.assertEqual("Relations.gh", converter.ghilbert_filename(
+      "Relations"))
+
   # Not a realistic test, in that kind is interface-only and thm
   # is proof-module-only. But we are a convert, not a verifier, so that is OK.
   def test_removes_parentheses_in_thm(self):
