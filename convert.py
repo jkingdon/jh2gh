@@ -35,7 +35,7 @@ class Convert:
 
   def undo_pseudo_infix(self, expression):
     if expression.__class__ != tree.Tree:
-      raise Exception("expected tree, got" + str(expression.__class__))
+      raise Exception("expected tree, got " + str(expression))
 
     term_index = None
     for i in xrange(0, len(expression)):
@@ -77,6 +77,10 @@ class Convert:
 
   def convert(self, input):
     expressions = tree.parse(input)
+    self.convert_tree(expressions)
+    return repr(expressions)
+
+  def convert_tree(self, expressions):
     i = 0
     while i < len(expressions):
       command = expressions[i]
@@ -157,8 +161,6 @@ class Convert:
 
       self.undo_pseudo_infix(arguments)
       i += 2
-
-    return repr(expressions)
 
   def set_opener(self, opener):
     self._opener = opener
