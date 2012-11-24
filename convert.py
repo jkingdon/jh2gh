@@ -223,7 +223,7 @@ class Wiki:
       elif in_proof:
         if line[0:4] == "thm ":
           in_theorem = True
-        elif line == "))":
+        elif line == "))\n":
           in_theorem = False
         result += line
 

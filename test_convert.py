@@ -304,6 +304,18 @@ Here we prove a theorem.
  )
 """, ghilbert)
 
+  def test_wiki_text_after_proof_goes_to_wiki(self):
+    string = """<jh>
+thm (foo () () () (
+  proof here
+))
+</jh>
+Here is some wikitext.
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    self.assertEqual("Here is some wikitext.\n", out.contents())
+
   def xtest_add_references_to_theorems_to_wiki(self):
     pass
 
