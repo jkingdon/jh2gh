@@ -260,6 +260,11 @@ if __name__ == '__main__':
   underscored_name = sys.argv[1]
   input = open(Convert().convert_filename(underscored_name), "r")
   output = open("../ghilbert-app/general/" + Convert().ghilbert_filename(underscored_name), "w")
+  output.write("# Creative Commons Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)\n")
 
-  output.write(Wiki().convert(input))
+  if underscored_name.split(":")[0] == "Interface":
+    jhilbert = WikiToCommentFilter(input)
+    output.write(Convert().convert(jhilbert))
+  else:
+    output.write(Wiki().convert(input))
 
