@@ -213,7 +213,7 @@ class Wiki:
   def read(self, input, wiki_out):
     result = ''
     in_proof = False
-    in_theorem = False
+    current_theorem = None
     while True:
       line = input.readline()
       if line == '':
@@ -222,15 +222,18 @@ class Wiki:
         in_proof = False
       elif in_proof:
         if line[0:4] == "thm ":
-          in_theorem = True
-        elif line == "))\n":
-          in_theorem = False
+          current_theorem = ""
+        if current_theorem != None:
+          current_theorem += line
+
+        if line == "))\n":
+          current_theorem = None
         result += line
 
       elif line == "<jh>\n":
         in_proof = True
       else:
-        if in_theorem:
+        if current_theorem != None:
           result += "# " + line
         else:
           wiki_out.write(line)

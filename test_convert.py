@@ -317,7 +317,16 @@ Here is some wikitext.
     self.assertEqual("Here is some wikitext.\n", out.contents())
 
   def xtest_add_references_to_theorems_to_wiki(self):
-    pass
+    string = """Now we will prove foo.
+<jh>
+thm (foo () () (≠ 4 5) (
+  proof here
+))
+</jh>
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    self.assertEqual("Now we will prove foo.\n* #(≠ 4 5) ([/general/file.gh/foo])\n", out.contents())
 
   def test_import(self):
     converter = convert.Convert()
