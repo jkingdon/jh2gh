@@ -285,6 +285,28 @@ End of file.
     convert.Wiki().convert(string_stream.StringStream(string), out)
     self.assertEqual("Start of file.\nEnd of file.\n", out.contents())
 
+  def xtest_wiki_text_in_a_proof_turn_to_comments(self):
+    string = """<jh>
+thm (foo () () () (
+</jh>
+Here we prove a theorem.
+<jh>
+  proof here
+))
+</jh>
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    self.assertEqual("", out.contents())
+    self.assertEqual("""thm (foo () () ()
+# Here we prove a theorem.
+  proof here
+ )
+""", ghilbert)
+
+  def xtest_add_references_to_theorems_to_wiki(self):
+    pass
+
   def test_import(self):
     converter = convert.Convert()
     opener = string_stream.Opener()
