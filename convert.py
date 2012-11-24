@@ -235,11 +235,12 @@ if __name__ == '__main__':
   if len(sys.argv) != 2:
     print >> sys.stderr, 'Usage: python convert.py UNDERSCORED-NAME'
     print >> sys.stderr, '  Run it from the wikiproofs directory.'
+    print >> sys.stderr, '  It will output to ../ghilbert-app/general'
     print >> sys.stderr, '  UNDERSCORED-NAME is the name as specified in wikiproofs, e.g. Interface:Set_theory'
     exit(1)
   underscored_name = sys.argv[1]
   input = open(Convert().convert_filename(underscored_name), "r")
-  output = open("ghilbert/" + Convert().ghilbert_filename(underscored_name), "w")
+  output = open("../ghilbert-app/general/" + Convert().ghilbert_filename(underscored_name), "w")
 
   output.write(Wiki().convert(input))
 
