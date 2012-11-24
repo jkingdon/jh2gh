@@ -274,6 +274,17 @@ term (formula (↔ p q))
     self.assertEqual("kind (formula)\ntvar (formula p)\n", self.wiki_convert(
       "<jh>\nkind (formula)\nvar (formula p)\n</jh>\n"))
 
+  def test_writes_wiki_output(self):
+    string = """Start of file.
+<jh>
+kind (formula)
+</jh>
+End of file.
+"""
+    out = string_stream.OutputStream()
+    convert.Wiki().convert(string_stream.StringStream(string), out)
+    self.assertEqual("Start of file.\nEnd of file.\n", out.contents())
+
   def test_import(self):
     converter = convert.Convert()
     opener = string_stream.Opener()

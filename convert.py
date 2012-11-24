@@ -222,8 +222,10 @@ class Wiki:
       elif in_proof:
         result += line
 
-      if line == "<jh>\n":
+      elif line == "<jh>\n":
         in_proof = True
+      else:
+        wiki_out.write(line)
     return result
 
   def convert(self, input, wiki_out):

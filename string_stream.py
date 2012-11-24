@@ -15,7 +15,7 @@ class StringStream:
                return result
 
 class OutputStream:
-  def __init(self):
+  def __init__(self):
     self._contents = ""
   def write(self, data):
     self._contents += data
