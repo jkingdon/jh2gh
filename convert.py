@@ -181,8 +181,7 @@ class Convert:
 
     filesystem_name = self.convert_filename(underscored_name)
     stream = self._opener.open_file(filesystem_name)
-    jhilbert = Wiki().read(stream)
-    self.convert(string_stream.StringStream(jhilbert))
+    self.convert(WikiToCommentFilter(stream))
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
@@ -211,7 +210,7 @@ class Convert:
     return [namespace, name]
 
 class Wiki:
-  def read(self, input):
+  def read(self, input, wiki_out):
     result = ''
     in_proof = False
     while True:
@@ -227,8 +226,8 @@ class Wiki:
         in_proof = True
     return result
 
-  def convert(self, input):
-    jhilbert = self.read(input)
+  def convert(self, input, wiki_out):
+    jhilbert = self.read(input, wiki_out)
     return Convert().convert(string_stream.StringStream(jhilbert))
 
 class WikiToCommentFilter:
@@ -266,5 +265,6 @@ if __name__ == '__main__':
     jhilbert = WikiToCommentFilter(input)
     output.write(Convert().convert(jhilbert))
   else:
-    output.write(Wiki().convert(input))
+    wiki_out = open("../ghilbert-app/wiki/general/" + underscored_name + ".ghm", "w")
+    output.write(Wiki().convert(input, wiki_out))
 

@@ -14,6 +14,14 @@ class StringStream:
                self.ix += 1
                return result
 
+class OutputStream:
+  def __init(self):
+    self._contents = ""
+  def write(self, data):
+    self._contents += data
+  def contents(self):
+    return self._contents
+
 class Opener:
   def __init__(self):
     self._files = {}

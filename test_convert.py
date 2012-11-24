@@ -254,10 +254,10 @@ term (formula (↔ p q))
 """, result)
 
   def wiki(self, string):
-    return convert.Wiki().read(string_stream.StringStream(string))
+    return convert.Wiki().read(string_stream.StringStream(string), string_stream.OutputStream())
 
   def wiki_convert(self, string):
-    return convert.Wiki().convert(string_stream.StringStream(string))
+    return convert.Wiki().convert(string_stream.StringStream(string), string_stream.OutputStream())
 
   def test_read_wiki_no_proof(self):
     self.assertEqual("", self.wiki("I\nam a proof\nsite\n"))
