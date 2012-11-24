@@ -231,6 +231,25 @@ class Wiki:
     jhilbert = self.read(input)
     return Convert().convert(string_stream.StringStream(jhilbert))
 
+class WikiToCommentFilter:
+  def __init__(self, input):
+    self._input = input
+    self._in_proof = False
+
+  def readline(self):
+    while True:
+      line = self._input.readline()
+      if line == '':
+        return line
+      elif line == "<jh>\n":
+        self._in_proof = True
+      elif line == "</jh>\n":
+        self._in_proof = False
+      elif self._in_proof:
+        return line
+      else:
+        return "# " + line
+
 if __name__ == '__main__':
   if len(sys.argv) != 2:
     print >> sys.stderr, 'Usage: python convert.py UNDERSCORED-NAME'
