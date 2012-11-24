@@ -285,7 +285,7 @@ End of file.
     convert.Wiki().convert(string_stream.StringStream(string), out)
     self.assertEqual("Start of file.\nEnd of file.\n", out.contents())
 
-  def xtest_wiki_text_in_a_proof_turn_to_comments(self):
+  def test_wiki_text_in_a_proof_turn_to_comments(self):
     string = """<jh>
 thm (foo () () () (
 </jh>
