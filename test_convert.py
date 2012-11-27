@@ -355,6 +355,16 @@ thm (foo () (H (¬ p)) (¬ p)
  )
 """, result)
 
+  def test_export(self):
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/o/Propositional logic",
+      string_stream.StringStream(""))
+    input = "export (INTUITIONISTIC Interface:Propositional_logic () ())"
+    result = converter.convert(string_stream.StringStream(input))
+    self.assertEqual('export (INTUITIONISTIC Propositional_logic.ghi () "")', result)
+
   def test_convert_filename_main(self):
     converter = convert.Convert()
     self.assertEqual("Main/R/e/l/Relations", converter.convert_filename(

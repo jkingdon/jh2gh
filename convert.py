@@ -99,8 +99,8 @@ class Convert:
         else:
           expressions[i] = "tvar"
         self.store_variables(arguments[0], arguments[1:])
-      elif command == "import":
-        self.process_import(arguments)
+      elif command == "import" or command == "export":
+        self.process_import_or_export(command, arguments)
       elif command == "term":
         assigner = VariableAssigner(self._variables)
         return_type = arguments[0]
@@ -169,7 +169,7 @@ class Convert:
   def set_opener(self, opener):
     self._opener = opener
 
-  def process_import(self, arguments):
+  def process_import_or_export(self, command, arguments):
     name = arguments[0]
     underscored_name = arguments[1]
     params = arguments[2]
@@ -179,9 +179,10 @@ class Convert:
       arguments[3] = '""'
     arguments[1] = self.ghilbert_filename(underscored_name)
 
-    filesystem_name = self.convert_filename(underscored_name)
-    stream = self._opener.open_file(filesystem_name)
-    self.convert(WikiToCommentFilter(stream))
+    if command == "import":
+      filesystem_name = self.convert_filename(underscored_name)
+      stream = self._opener.open_file(filesystem_name)
+      self.convert(WikiToCommentFilter(stream))
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
