@@ -14,7 +14,7 @@ class Tree:
       ]
 
   def elements_including_whitespace(self):
-    return self._elements[:]
+    return [element for element in self._elements if element.__class__ != tokenizer.Wiki]
 
   def raw_index(self, cooked_index):
     cooked = 0

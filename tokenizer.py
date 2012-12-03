@@ -52,3 +52,7 @@ class Tokenizer:
 def tokenize(stream):
   return Tokenizer(stream).read_all()
 
+class Wiki:
+  def __init__(self, text):
+    pass
+

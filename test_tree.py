@@ -85,6 +85,10 @@ class test_tree(unittest.TestCase):
     elements[0] = "bar"
     self.assertEqual("foo", repr(tree))
 
+  def test_elements_including_whitespace_does_not_include_wiki_nodes(self):
+    sample_tree = tree.Tree([tokenizer.Wiki("We define a kind called formula"), "kind", ["formula"]])
+    self.assertEqual(["kind", ["formula"]], sample_tree.elements_including_whitespace())
+
   def test_index_children(self):
     array = self.read_expression("(first second)")
     self.assertEqual("first", array[0])
