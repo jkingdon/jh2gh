@@ -7,11 +7,18 @@ class Tree:
   def __len__(self):
     return len(self.elements_children_as_trees())
 
+  def is_semantic(self, element):
+    if element.__class__ == Tree:
+      return True
+    elif element.__class__ == tokenizer.Wiki:
+      return False
+    elif element.__class__ == 'foo'.__class__:
+      return not element.isspace() and not element.startswith("#")
+    else:
+      raise Exception("don't know what to do with " + element.__class__.__name__)
+
   def elements_children_as_trees(self):
-    return [element for element in self._elements
-      if element.__class__ == Tree or
-        (not element.isspace() and not element.startswith("#"))
-      ]
+    return [element for element in self._elements if self.is_semantic(element)]
 
   def elements_including_whitespace(self):
     return [element for element in self._elements if element.__class__ != tokenizer.Wiki]
