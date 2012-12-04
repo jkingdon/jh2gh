@@ -60,7 +60,7 @@ class Tree:
 
   def __repr__(self):
     result = ''
-    for element in self._elements:
+    for element in self.elements_including_whitespace():
       if element.__class__ == Tree:
         result += '('
         result += repr(element)
