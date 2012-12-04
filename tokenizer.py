@@ -25,8 +25,11 @@ class GhilbertTokenizer:
     return self._stream.readline()
 
 class Tokenizer:
-  def __init__(self, stream):
-    self._wiki_tokenizer = GhilbertTokenizer(stream)
+  def __init__(self, input):
+    if input.__class__ == WikiTokenizer:
+      self._wiki_tokenizer = input
+    else:
+      self._wiki_tokenizer = GhilbertTokenizer(input)
     self.line = ''
 
   def next_token(self):

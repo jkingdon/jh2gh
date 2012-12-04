@@ -88,7 +88,9 @@ def read_expression(tokenizer1):
             return token
 
 def parse(stream):
-  tokenizer1 = tokenizer.Tokenizer(stream)
+  return parse_from_tokenizer(tokenizer.Tokenizer(stream))
+
+def parse_from_tokenizer(tokenizer1):
   expressions = []
   while True:
     expression = read_expression(tokenizer1)
