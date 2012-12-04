@@ -86,5 +86,8 @@ def tokenize(stream):
 
 class Wiki:
   def __init__(self, text):
-    pass
+    self._text = text
+
+  def text(self):
+    return self._text
 

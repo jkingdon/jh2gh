@@ -95,7 +95,7 @@ And it ends."""
     t = tree.parse_from_tokenizer(tokenizer1)
     self.assertEqual("""kind (formula)""", repr(t))
 
-  def xtest_as_string_wiki_to_comment(self):
+  def xtest_to_string_wiki_to_comment(self):
     input_string = """This is a file.
 <jh>
 kind (formula)
@@ -105,7 +105,7 @@ And it ends."""
     t = tree.parse_from_tokenizer(tokenizer1)
     self.assertEqual("""# This is a file.
 kind (formula)
-# And it ends.""", repr(t))
+# And it ends.""", t.to_string_wiki_to_comment())
 
   def test_elements_including_whitespace_does_not_include_wiki_nodes(self):
     subtree = tree.Tree("formula")

@@ -69,6 +69,20 @@ class Tree:
         result += element
     return result
 
+  def to_string_wiki_to_comment(self):
+    result = ''
+    for element in self._elements:
+      if element.__class__ == Tree:
+        result += '('
+        result += repr(element)
+        result += ')'
+      elif element.__class__ == tokenizer.Wiki:
+        result += "# "
+        result += element.text()
+      else:
+        result += element
+    return result
+
 def read_expression(tokenizer1):
     while True:
         token = tokenizer1.next_token()
