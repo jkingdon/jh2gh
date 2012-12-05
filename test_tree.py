@@ -93,9 +93,9 @@ kind (formula)
 And it ends."""
     tokenizer1 = tokenizer.Tokenizer(tokenizer.WikiTokenizer(string_stream.StringStream(input_string)))
     t = tree.parse_from_tokenizer(tokenizer1)
-    self.assertEqual("""kind (formula)""", repr(t))
+    self.assertEqual("kind (formula)\n", repr(t))
 
-  def xtest_to_string_wiki_to_comment(self):
+  def test_to_string_wiki_to_comment(self):
     input_string = """This is a file.
 <jh>
 kind (formula)

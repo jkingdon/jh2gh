@@ -36,6 +36,8 @@ class Tokenizer:
     current_token = ''
     while True:
       if self.line == '':
+        if current_token != '':
+          return current_token
         line_or_wiki_token = self._wiki_tokenizer.read_line_or_wiki_token()
         if line_or_wiki_token == '':
           break

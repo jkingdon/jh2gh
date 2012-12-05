@@ -4,7 +4,7 @@ import unittest
 import tokenizer
 import string_stream
 
-class test_tree(unittest.TestCase):
+class test_tokenizer(unittest.TestCase):
   def process(self, inputString):
     return tokenizer.tokenize(string_stream.StringStream(inputString))
 
@@ -16,6 +16,9 @@ class test_tree(unittest.TestCase):
 
   def test_does_not_double_final_newline(self):
     self.assertEqual(["frog", "\n"], self.process("frog\n"))
+
+  def test_right_paren_then_newline(self):
+    self.assertEqual(["(", "frog", ")", "\n"], self.process("(frog)\n"))
 
   def test_parenthesized_expression(self):
     tokens = self.process("(5 gherkin flavour)")
@@ -47,4 +50,15 @@ class test_tree(unittest.TestCase):
     self.assertEqual("token1", tokenizer1.next_token())
     self.assertEqual(" ", tokenizer1.next_token())
     self.assertEqual(None, tokenizer1.next_token())
+
+  def test_wiki(self):
+    input = """A first line.
+<jh>
+kind (formula)
+</jh>
+A last line."""
+    tokens = tokenizer.tokenize(tokenizer.WikiTokenizer(string_stream.StringStream(input)))
+    self.assertEqual(tokenizer.Wiki, tokens[0].__class__)
+    self.assertEqual(["kind", " ", "(", "formula", ")", "\n"], tokens[1:7])
+    self.assertEqual(tokenizer.Wiki, tokens[7].__class__)
 
