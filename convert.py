@@ -38,7 +38,7 @@ class Convert:
       raise Exception("expected tree, got " + str(expression))
 
     term_index = None
-    for i in xrange(0, len(expression)):
+    for i in range(0, len(expression)):
       element = expression[i]
       if element in self._terms:
         term_index = i
@@ -46,7 +46,7 @@ class Convert:
         self.undo_pseudo_infix(element)
     if term_index != None:
       term = expression[term_index]
-      for j in xrange(term_index - 1, -1, -1):
+      for j in range(term_index - 1, -1, -1):
         expression[j + 1] = expression[j]
       expression[0] = term
 
@@ -109,7 +109,7 @@ class Convert:
 
         self._terms[name] = return_type
 
-        for j in xrange(1, len(name_and_arguments)):
+        for j in range(1, len(name_and_arguments)):
           name_and_arguments[j] = assigner.next_name(name_and_arguments[j])
       elif command == "def":
         definiendum = arguments[0]

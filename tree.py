@@ -25,7 +25,7 @@ class Tree:
 
   def raw_index(self, cooked_index):
     cooked = 0
-    for raw in xrange(len(self._elements)):
+    for raw in range(len(self._elements)):
       if cooked == cooked_index:
         return raw
       element = self._elements[raw]
