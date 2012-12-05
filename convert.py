@@ -265,10 +265,10 @@ class WikiToCommentFilter:
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:
-    print >> sys.stderr, 'Usage: python convert.py UNDERSCORED-NAME'
-    print >> sys.stderr, '  Run it from the wikiproofs directory.'
-    print >> sys.stderr, '  It will output to ../ghilbert-app/general'
-    print >> sys.stderr, '  UNDERSCORED-NAME is the name as specified in wikiproofs, e.g. Interface:Set_theory'
+    sys.stderr.write('Usage: python convert.py UNDERSCORED-NAME\n')
+    sys.stderr.write('  Run it from the wikiproofs directory.\n')
+    sys.stderr.write('  It will output to ../ghilbert-app/general\n')
+    sys.stderr.write('  UNDERSCORED-NAME is the name as specified in wikiproofs, e.g. Interface:Set_theory\n')
     exit(1)
   underscored_name = sys.argv[1]
   input = open(Convert().convert_filename(underscored_name), "r")
