@@ -58,7 +58,7 @@ class Convert:
       '→': 'Implication',
       '¬': 'Negation'
     }
-    if preset_names.has_key(term):
+    if term in preset_names:
       return preset_names[term]
     else:
       return term.capitalize()

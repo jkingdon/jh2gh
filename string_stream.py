@@ -30,7 +30,7 @@ class Opener:
     self._files[name] = stream
 
   def open_file(self, name):
-    if self._files.has_key(name):
+    if name in self._files:
       return self._files[name]
     else:
       raise Exception("No such (fake) file " + name)
