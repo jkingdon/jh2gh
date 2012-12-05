@@ -276,8 +276,9 @@ if __name__ == '__main__':
   output.write("# Creative Commons Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)\n")
 
   if underscored_name.split(":")[0] == "Interface":
-    jhilbert = WikiToCommentFilter(input)
-    output.write(Convert().convert(jhilbert))
+    expressions = tree.parse(tokenizer.WikiTokenizer(input))
+    Convert().convert_tree(expressions)
+    output.write(expressions.to_string_wiki_to_comment())
   else:
     wiki_out = open("../ghilbert-app/wiki/general/" + underscored_name + ".ghm", "w")
     output.write(Wiki().convert(input, wiki_out))
