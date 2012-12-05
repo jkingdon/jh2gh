@@ -133,6 +133,11 @@ kind (formula)
     tree[2] = "red"
     self.assertEqual("the quick red fox", repr(tree))
 
+  def test_setting_item_works_with_wiki(self):
+    sample_tree = tree.Tree([tokenizer.Wiki("We define a kind\n"), "kynd"])
+    sample_tree[0] = "kind"
+    self.assertEqual("# We define a kind\nkind", sample_tree.to_string_wiki_to_comment())
+
   def test_insert(self):
     tree = self.process("")
     tree.insert(0, ["foo"])

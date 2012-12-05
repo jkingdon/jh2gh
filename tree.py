@@ -48,7 +48,7 @@ class Tree:
       element = self._elements[j]
       if element.__class__ == Tree:
         non_whitespace += 1
-      elif element.isspace() or element.startswith("#"):
+      elif element.__class__ == tokenizer.Wiki or element.isspace() or element.startswith("#"):
         j += 1
         continue
       else:

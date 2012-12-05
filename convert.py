@@ -182,7 +182,7 @@ class Convert:
     if command == "import":
       filesystem_name = self.convert_filename(underscored_name)
       stream = self._opener.open_file(filesystem_name)
-      self.convert(WikiToCommentFilter(stream))
+      self.convert(tokenizer.WikiTokenizer(stream))
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
