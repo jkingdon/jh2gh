@@ -149,7 +149,7 @@ class Convert:
         proof = arguments[4]
 
         arguments[4] = ''
-        arguments.insert(4, proof.elements_including_whitespace())
+        arguments.insert(4, proof.all_elements())
 
         new_hypotheses = []
         prefix = ""
@@ -241,11 +241,9 @@ class Wiki:
     return result
 
   def convert(self, input, wiki_out):
-    jhilbert = self.read(input, wiki_out)
-    return Convert().convert(string_stream.StringStream(jhilbert))
-#    expressions = tree.parse(tokenizer.WikiTokenizer(input))
-#    Convert().convert_tree(expressions)
-#    return expressions.to_string_wiki_to_wiki_out(wiki_out)
+    expressions = tree.parse(tokenizer.WikiTokenizer(input))
+    Convert().convert_tree(expressions)
+    return expressions.to_string_wiki_to_wiki_out(wiki_out)
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:

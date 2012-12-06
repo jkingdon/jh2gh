@@ -20,8 +20,8 @@ class Tree:
   def elements_children_as_trees(self):
     return [element for element in self._elements if self.is_semantic(element)]
 
-  def elements_including_whitespace(self):
-    return [element for element in self._elements if element.__class__ != tokenizer.Wiki]
+  def all_elements(self):
+    return self._elements[:]
 
   def raw_index(self, cooked_index):
     cooked = 0
@@ -60,11 +60,13 @@ class Tree:
 
   def __repr__(self):
     result = ''
-    for element in self.elements_including_whitespace():
+    for element in self._elements:
       if element.__class__ == Tree:
         result += '('
         result += repr(element)
         result += ')'
+      elif element.__class__ == tokenizer.Wiki:
+        pass
       else:
         result += element
     return result

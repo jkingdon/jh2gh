@@ -75,13 +75,13 @@ class test_tree(unittest.TestCase):
   def test_preserve_comments(self):
     self.assertEqual("  foo # bar", repr(self.process("  foo # bar")))
 
-  def test_elements_including_whitespace(self):
+  def test_all_elements(self):
     self.assertEqual(["  ", "foo", " ", "# bar"],
-      self.process("  foo # bar").elements_including_whitespace())
+      self.process("  foo # bar").all_elements())
 
-  def test_cannot_modify_via_elements_including_whitespace(self):
+  def test_cannot_modify_via_all_elements(self):
     tree = self.process("foo")
-    elements = tree.elements_including_whitespace()
+    elements = tree.all_elements()
     elements[0] = "bar"
     self.assertEqual("foo", repr(tree))
 
@@ -156,10 +156,11 @@ We will start with a proof.
 """, proof)
     self.assertEqual("", wiki_out.contents())
 
-  def test_elements_including_whitespace_does_not_include_wiki_nodes(self):
+  def test_all_elements_includes_wiki_nodes(self):
     subtree = tree.Tree("formula")
-    sample_tree = tree.Tree([tokenizer.Wiki("We define a kind called formula"), "kind", subtree])
-    self.assertEqual(["kind", subtree], sample_tree.elements_including_whitespace())
+    wiki_node = tokenizer.Wiki("We define a kind called formula")
+    sample_tree = tree.Tree([wiki_node, "kind", subtree])
+    self.assertEqual([wiki_node, "kind", subtree], sample_tree.all_elements())
 
   def test_elements_children_as_trees_does_not_include_wiki_nodes(self):
     subtree = tree.Tree("formula")
