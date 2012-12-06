@@ -413,15 +413,3 @@ thm (foo () (H (¬ p)) (¬ p)
  )
 """, result)
 
-  def test_wiki_to_comment_filter(self):
-    f = convert.WikiToCommentFilter(string_stream.StringStream("""This is some wikitext.
-<jh>
-kind (formula)
-</jh>
-This is more wikitext.
-"""))
-    self.assertEqual("# This is some wikitext.\n", f.readline())
-    self.assertEqual("kind (formula)\n", f.readline())
-    self.assertEqual("# This is more wikitext.\n", f.readline())
-    self.assertEqual("", f.readline())
-
