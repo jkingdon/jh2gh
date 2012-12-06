@@ -95,17 +95,32 @@ And it ends."""
     t = tree.parse_from_tokenizer(tokenizer1)
     self.assertEqual("kind (formula)\n", repr(t))
 
+  def tree_from_wiki(self, input_string):
+    tokenizer1 = tokenizer.Tokenizer(tokenizer.WikiTokenizer(string_stream.StringStream(input_string)))
+    return tree.parse_from_tokenizer(tokenizer1)
+
   def test_to_string_wiki_to_comment(self):
     input_string = """This is a file.
 <jh>
 kind (formula)
 </jh>
 And it ends."""
-    tokenizer1 = tokenizer.Tokenizer(tokenizer.WikiTokenizer(string_stream.StringStream(input_string)))
-    t = tree.parse_from_tokenizer(tokenizer1)
+    t = self.tree_from_wiki(input_string)
     self.assertEqual("""# This is a file.
 kind (formula)
 # And it ends.""", t.to_string_wiki_to_comment())
+
+  def test_to_string_wiki_to_wiki_out(self):
+    input_string = """This is a file.
+<jh>
+kind (formula)
+</jh>
+And it ends."""
+    t = self.tree_from_wiki(input_string)
+    wiki_out = string_stream.OutputStream()
+    proof = t.to_string_wiki_to_wiki_out(wiki_out)
+    self.assertEqual("kind (formula)\n", proof)
+    self.assertEqual("This is a file.\nAnd it ends.", wiki_out.contents())
 
   def test_elements_including_whitespace_does_not_include_wiki_nodes(self):
     subtree = tree.Tree("formula")
