@@ -74,7 +74,7 @@ class Tree:
     for element in self._elements:
       if element.__class__ == Tree:
         result += '('
-        result += repr(element)
+        result += element.to_string_wiki_to_comment()
         result += ')'
       elif element.__class__ == tokenizer.Wiki:
         result += "# "
@@ -95,6 +95,19 @@ class Tree:
       else:
         proof += element
     return proof
+
+  def debug_string(self, indent):
+    result = ''
+    for element in self._elements:
+      if element.__class__ == Tree:
+        result += ' ' * indent + '(\n'
+        result += element.debug_string(indent + 2)
+        result += ' ' * indent + ')\n'
+      elif element.__class__ == tokenizer.Wiki:
+        result += ' ' * indent + 'Wiki(' + element.text() + ')\n'
+      else:
+        result += ' ' * indent + "'" + element + "'\n"
+    return result
 
 def read_expression(tokenizer1):
     while True:

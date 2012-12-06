@@ -110,6 +110,20 @@ And it ends."""
 kind (formula)
 # And it ends.""", t.to_string_wiki_to_comment())
 
+  def test_to_string_wiki_to_comment_nested(self):
+    input_string = """<jh>
+(
+</jh>
+Here is a comment.
+<jh>
+)
+"""
+    t = self.tree_from_wiki(input_string)
+    self.assertEqual("""(
+# Here is a comment.
+)
+""", t.to_string_wiki_to_comment())
+
   def test_to_string_wiki_to_wiki_out(self):
     input_string = """This is a file.
 <jh>
