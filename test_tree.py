@@ -122,6 +122,26 @@ And it ends."""
     self.assertEqual("kind (formula)\n", proof)
     self.assertEqual("This is a file.\nAnd it ends.", wiki_out.contents())
 
+  def test_wiki_text_in_proofs_ends_up_as_comments(self):
+    input_string = """<jh>
+thm (x () () result
+</jh>
+We will start with a proof.
+<jh>
+    proof steps
+)
+</jh>
+"""
+    t = self.tree_from_wiki(input_string)
+    wiki_out = string_stream.OutputStream()
+    proof = t.to_string_wiki_to_wiki_out(wiki_out)
+    self.assertEqual("""thm (x () () result
+# We will start with a proof.
+    proof steps
+)
+""", proof)
+    self.assertEqual("", wiki_out.contents())
+
   def test_elements_including_whitespace_does_not_include_wiki_nodes(self):
     subtree = tree.Tree("formula")
     sample_tree = tree.Tree([tokenizer.Wiki("We define a kind called formula"), "kind", subtree])

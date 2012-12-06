@@ -88,7 +88,7 @@ class Tree:
     for element in self._elements:
       if element.__class__ == Tree:
         proof += '('
-        proof += repr(element)
+        proof += element.to_string_wiki_to_comment()
         proof += ')'
       elif element.__class__ == tokenizer.Wiki:
         wiki_out.write(element.text())
