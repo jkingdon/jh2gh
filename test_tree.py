@@ -16,24 +16,24 @@ class test_tree(unittest.TestCase):
   def test_empty(self):
     tree = self.process("")
     self.assertEqual(0, len(tree))
-    self.assertEqual([], tree.elements_children_as_trees())
+    self.assertEqual([], tree.semantic_elements())
 
   def test_atom(self):
     tree = self.process("frog")
     self.assertEqual(1, len(tree))
-    self.assertEqual(["frog"], tree.elements_children_as_trees())
+    self.assertEqual(["frog"], tree.semantic_elements())
 
   def test_parenthesized_expression(self):
     tree = self.process("(5 gherkin flavour)")
     self.assertEqual(1, len(tree))
     self.assertEqual(["5", "gherkin", "flavour"],
-      tree[0].elements_children_as_trees())
+      tree[0].semantic_elements())
 
   def test_nested(self):
     tree = self.process("(- (+ a b))")
-    elements = tree.elements_children_as_trees()[0]
+    elements = tree.semantic_elements()[0]
     self.assertEqual("-", elements[0])
-    self.assertEqual(["+", "a", "b"], elements[1].elements_children_as_trees())
+    self.assertEqual(["+", "a", "b"], elements[1].semantic_elements())
 
   def test_deeply_nested(self):
     tree = self.process("(= (+ (+ a b) c) (+ a (+ b c)))")
@@ -70,7 +70,7 @@ class test_tree(unittest.TestCase):
 
   def test_hash_to_end_of_line_is_comment(self):
     tree = self.process("  foo # a common metavariable")
-    self.assertEqual(["foo"], tree.elements_children_as_trees())
+    self.assertEqual(["foo"], tree.semantic_elements())
 
   def test_preserve_comments(self):
     self.assertEqual("  foo # bar", repr(self.process("  foo # bar")))
@@ -130,10 +130,10 @@ Here is a comment.
     sample_tree = tree.Tree([wiki_node, "kind", subtree])
     self.assertEqual([wiki_node, "kind", subtree], sample_tree.all_elements())
 
-  def test_elements_children_as_trees_does_not_include_wiki_nodes(self):
+  def test_semantic_elements_does_not_include_wiki_nodes(self):
     subtree = tree.Tree("formula")
     sample_tree = tree.Tree([tokenizer.Wiki("We define a kind called formula"), "kind", subtree])
-    self.assertEqual(["kind", subtree], sample_tree.elements_children_as_trees())
+    self.assertEqual(["kind", subtree], sample_tree.semantic_elements())
 
   def test_index_children(self):
     array = self.read_expression("(first second)")

@@ -216,11 +216,16 @@ class Wiki:
     self._wiki_out = wiki_out
     self._proof = ''
 
+  def write_theorem_references(self, tree):
+    for node in tree:
+      pass
+
   def to_string_wiki_to_wiki_out(self):
     for element in self._tree.all_elements():
       if element.__class__ == tree.Tree:
         self._proof += '('
         self._proof += element.to_string_wiki_to_comment()
+        self.write_theorem_references(element)
         self._proof += ')'
       elif element.__class__ == tokenizer.Wiki:
         self._wiki_out.write(element.text())

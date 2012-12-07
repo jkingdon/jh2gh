@@ -5,7 +5,7 @@ class Tree:
     self._elements = elements
 
   def __len__(self):
-    return len(self.elements_children_as_trees())
+    return len(self.semantic_elements())
 
   def is_semantic(self, element):
     if element.__class__ == Tree:
@@ -17,7 +17,7 @@ class Tree:
     else:
       raise Exception("don't know what to do with " + element.__class__.__name__)
 
-  def elements_children_as_trees(self):
+  def semantic_elements(self):
     return [element for element in self._elements if self.is_semantic(element)]
 
   def all_elements(self):
@@ -39,7 +39,7 @@ class Tree:
     self._elements[raw_index:raw_index] = new_elements
 
   def __getitem__(self, index):
-    return self.elements_children_as_trees()[index]
+    return self.semantic_elements()[index]
 
   def __setitem__(self, index, value):
     non_whitespace = -1
