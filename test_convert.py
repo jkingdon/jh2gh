@@ -254,7 +254,7 @@ term (formula (↔ p q))
 """, result)
 
   def wiki_convert(self, string):
-    return convert.Wiki().convert(string_stream.StringStream(string), string_stream.OutputStream())
+    return convert.Wiki(string_stream.StringStream(string), string_stream.OutputStream()).convert()
 
   def test_read_wiki_no_proof(self):
     self.assertEqual("", self.wiki_convert("I\nam a proof\nsite\n"))
@@ -279,7 +279,7 @@ kind (formula)
 End of file.
 """
     out = string_stream.OutputStream()
-    convert.Wiki().convert(string_stream.StringStream(string), out)
+    convert.Wiki(string_stream.StringStream(string), out).convert()
     self.assertEqual("Start of file.\nEnd of file.\n", out.contents())
 
   def test_wiki_text_in_a_proof_turn_to_comments(self):
@@ -293,7 +293,7 @@ Here we prove a theorem.
 </jh>
 """
     out = string_stream.OutputStream()
-    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    ghilbert = convert.Wiki(string_stream.StringStream(string), out).convert()
     self.assertEqual("", out.contents())
     self.assertEqual("""thm (foo () () ()
 # Here we prove a theorem.
@@ -310,7 +310,7 @@ thm (foo () () () (
 Here is some wikitext.
 """
     out = string_stream.OutputStream()
-    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    ghilbert = convert.Wiki(string_stream.StringStream(string), out).convert()
     self.assertEqual("Here is some wikitext.\n", out.contents())
 
   def xtest_add_references_to_theorems_to_wiki(self):
@@ -322,7 +322,7 @@ thm (foo () () (≠ 4 5) (
 </jh>
 """
     out = string_stream.OutputStream()
-    ghilbert = convert.Wiki().convert(string_stream.StringStream(string), out)
+    ghilbert = convert.Wiki(string_stream.StringStream(string), out).convert()
     self.assertEqual("Now we will prove foo.\n* #(≠ 4 5) ([/general/file.gh/foo])\n", out.contents())
 
   def test_import(self):

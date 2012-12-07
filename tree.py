@@ -85,19 +85,6 @@ class Tree:
         result += element
     return result
 
-  def to_string_wiki_to_wiki_out(self, wiki_out):
-    proof = ''
-    for element in self._elements:
-      if element.__class__ == Tree:
-        proof += '('
-        proof += element.to_string_wiki_to_comment()
-        proof += ')'
-      elif element.__class__ == tokenizer.Wiki:
-        wiki_out.write(element.text())
-      else:
-        proof += element
-    return proof
-
   def debug_string(self, indent):
     result = ''
     for element in self._elements:

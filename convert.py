@@ -211,10 +211,26 @@ class Convert:
     return [namespace, name]
 
 class Wiki:
-  def convert(self, input, wiki_out):
-    expressions = tree.parse(tokenizer.WikiTokenizer(input))
-    Convert().convert_tree(expressions)
-    return expressions.to_string_wiki_to_wiki_out(wiki_out)
+  def __init__(self, input, wiki_out):
+    self._tree = tree.parse(tokenizer.WikiTokenizer(input))
+    self._wiki_out = wiki_out
+    self._proof = ''
+
+  def to_string_wiki_to_wiki_out(self):
+    for element in self._tree.all_elements():
+      if element.__class__ == tree.Tree:
+        self._proof += '('
+        self._proof += element.to_string_wiki_to_comment()
+        self._proof += ')'
+      elif element.__class__ == tokenizer.Wiki:
+        self._wiki_out.write(element.text())
+      else:
+        self._proof += element
+
+  def convert(self):
+    Convert().convert_tree(self._tree)
+    self.to_string_wiki_to_wiki_out()
+    return self._proof
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:

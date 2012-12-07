@@ -124,38 +124,6 @@ Here is a comment.
 )
 """, t.to_string_wiki_to_comment())
 
-  def test_to_string_wiki_to_wiki_out(self):
-    input_string = """This is a file.
-<jh>
-kind (formula)
-</jh>
-And it ends."""
-    t = self.tree_from_wiki(input_string)
-    wiki_out = string_stream.OutputStream()
-    proof = t.to_string_wiki_to_wiki_out(wiki_out)
-    self.assertEqual("kind (formula)\n", proof)
-    self.assertEqual("This is a file.\nAnd it ends.", wiki_out.contents())
-
-  def test_wiki_text_in_proofs_ends_up_as_comments(self):
-    input_string = """<jh>
-thm (x () () result
-</jh>
-We will start with a proof.
-<jh>
-    proof steps
-)
-</jh>
-"""
-    t = self.tree_from_wiki(input_string)
-    wiki_out = string_stream.OutputStream()
-    proof = t.to_string_wiki_to_wiki_out(wiki_out)
-    self.assertEqual("""thm (x () () result
-# We will start with a proof.
-    proof steps
-)
-""", proof)
-    self.assertEqual("", wiki_out.contents())
-
   def test_all_elements_includes_wiki_nodes(self):
     subtree = tree.Tree("formula")
     wiki_node = tokenizer.Wiki("We define a kind called formula")
