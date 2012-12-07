@@ -211,35 +211,6 @@ class Convert:
     return [namespace, name]
 
 class Wiki:
-  def read(self, input, wiki_out):
-    result = ''
-    in_proof = False
-    current_theorem = None
-    while True:
-      line = input.readline()
-      if line == '':
-        break
-      if line == "</jh>\n":
-        in_proof = False
-      elif in_proof:
-        if line[0:4] == "thm ":
-          current_theorem = ""
-        if current_theorem != None:
-          current_theorem += line
-
-        if line == "))\n":
-          current_theorem = None
-        result += line
-
-      elif line == "<jh>\n":
-        in_proof = True
-      else:
-        if current_theorem != None:
-          result += "# " + line
-        else:
-          wiki_out.write(line)
-    return result
-
   def convert(self, input, wiki_out):
     expressions = tree.parse(tokenizer.WikiTokenizer(input))
     Convert().convert_tree(expressions)

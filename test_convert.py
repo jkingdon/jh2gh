@@ -253,22 +253,19 @@ term (formula (∧ p q))
 term (formula (↔ p q))
 """, result)
 
-  def wiki(self, string):
-    return convert.Wiki().read(string_stream.StringStream(string), string_stream.OutputStream())
-
   def wiki_convert(self, string):
     return convert.Wiki().convert(string_stream.StringStream(string), string_stream.OutputStream())
 
   def test_read_wiki_no_proof(self):
-    self.assertEqual("", self.wiki("I\nam a proof\nsite\n"))
+    self.assertEqual("", self.wiki_convert("I\nam a proof\nsite\n"))
 
   def test_read_wiki_open_jh(self):
     input = "<jh>\nkind (formula)\n</jh>\n"
-    self.assertEqual("kind (formula)\n", self.wiki(input))
+    self.assertEqual("kind (formula)\n", self.wiki_convert(input))
 
   def test_read_wiki_multiple_jh(self):
     input = "<jh>\nkind\n</jh>\nhere we define it\n<jh>\n (formula)\n</jh>\n"
-    self.assertEqual("kind\n (formula)\n", self.wiki(input))
+    self.assertEqual("kind\n (formula)\n", self.wiki_convert(input))
 
   def test_converts_proofs_in_wiki(self):
     self.assertEqual("kind (formula)\ntvar (formula p)\n", self.wiki_convert(
