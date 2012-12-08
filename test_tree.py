@@ -176,3 +176,7 @@ Here is a comment.
     tree.insert(1, ["-", "bar", "\n", "# I'm inserting!"])
     self.assertEqual("foo-bar\n# I'm inserting!", repr(tree))
 
+  def test_insert_with_wiki(self):
+    sample_tree = tree.Tree([tokenizer.Wiki("We define a kind\n"), tokenizer.Wiki("We did it.")])
+    sample_tree.insert(1, ["kind"])
+

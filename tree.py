@@ -29,8 +29,7 @@ class Tree:
       if cooked == cooked_index:
         return raw
       element = self._elements[raw]
-      if (element.__class__ == Tree or
-        (not element.isspace() and not element.startswith("#"))):
+      if self.is_semantic(element):
         cooked += 1
     return len(self._elements)
 
