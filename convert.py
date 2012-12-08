@@ -211,26 +211,38 @@ class Convert:
     return [namespace, name]
 
 class Wiki:
-  def __init__(self, input, wiki_out):
+  def __init__(self, input, proof_filename, wiki_out):
     self._tree = tree.parse(tokenizer.WikiTokenizer(input))
+    self._proof_filename = proof_filename
     self._wiki_out = wiki_out
     self._proof = ''
 
-  def write_theorem_references(self, tree):
-    for node in tree:
-      pass
+  def write_theorem_references(self, arguments):
+    name = arguments[0]
+    distinctness_constraints = arguments[1]
+    hypotheses = arguments[2]
+    conclusion = arguments[3]
+    self._wiki_out.write("* #(")
+    self._wiki_out.write(repr(conclusion))
+    self._wiki_out.write(") ([" + self._proof_filename + "/")
+    self._wiki_out.write(name)
+    self._wiki_out.write("])\n")
 
   def to_string_wiki_to_wiki_out(self):
+    most_recent_atom = None
     for element in self._tree.all_elements():
       if element.__class__ == tree.Tree:
         self._proof += '('
         self._proof += element.to_string_wiki_to_comment()
-        self.write_theorem_references(element)
+        if most_recent_atom == 'thm':
+          self.write_theorem_references(element)
         self._proof += ')'
       elif element.__class__ == tokenizer.Wiki:
         self._wiki_out.write(element.text())
       else:
         self._proof += element
+        if not element.isspace() and not element.startswith("#"):
+          most_recent_atom = element
 
   def convert(self):
     Convert().convert_tree(self._tree)
@@ -246,7 +258,8 @@ if __name__ == '__main__':
     exit(1)
   underscored_name = sys.argv[1]
   input = open(Convert().convert_filename(underscored_name), "r")
-  output = open("../ghilbert-app/general/" + Convert().ghilbert_filename(underscored_name), "w")
+  proof_filename = "/general/" + Convert().ghilbert_filename(underscored_name)
+  output = open("../ghilbert-app" + proof_filename, "w")
   output.write("# Creative Commons Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)\n")
 
   if underscored_name.split(":")[0] == "Interface":
@@ -255,5 +268,5 @@ if __name__ == '__main__':
     output.write(expressions.to_string_wiki_to_comment())
   else:
     wiki_out = open("../ghilbert-app/wiki/general/" + underscored_name + ".ghm", "w")
-    output.write(Wiki().convert(input, wiki_out))
+    output.write(Wiki(input, proof_filename, wiki_out).convert())
 
