@@ -224,7 +224,7 @@ class Wiki:
     conclusion = arguments[3]
     self._wiki_out.write("* #(")
     self._wiki_out.write(repr(conclusion))
-    self._wiki_out.write(") ([" + self._proof_filename + "/")
+    self._wiki_out.write(")# ([" + self._proof_filename + "/")
     self._wiki_out.write(name)
     self._wiki_out.write("])\n")
 

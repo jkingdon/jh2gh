@@ -294,7 +294,7 @@ Here we prove a theorem.
 """
     out = string_stream.OutputStream()
     ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
-    self.assertEqual("* #() ([file.gh/foo])\n", out.contents())
+    self.assertEqual("* #()# ([file.gh/foo])\n", out.contents())
     self.assertEqual("""thm (foo () () ()
 # Here we prove a theorem.
   proof here
@@ -311,7 +311,7 @@ Here is some wikitext.
 """
     out = string_stream.OutputStream()
     ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
-    self.assertEqual("* #() ([file.gh/foo])\nHere is some wikitext.\n", out.contents())
+    self.assertEqual("* #()# ([file.gh/foo])\nHere is some wikitext.\n", out.contents())
 
   def test_add_references_to_theorems_to_wiki(self):
     string = """Now we will prove foo.
@@ -323,7 +323,7 @@ thm (foo () () (≠ 4 5) (
 """
     out = string_stream.OutputStream()
     ghilbert = convert.Wiki(string_stream.StringStream(string), "/general/file.gh", out).convert()
-    self.assertEqual("Now we will prove foo.\n* #(≠ 4 5) ([/general/file.gh/foo])\n", out.contents())
+    self.assertEqual("Now we will prove foo.\n* #(≠ 4 5)# ([/general/file.gh/foo])\n", out.contents())
 
   def xtest_show_hypotheses(self):
     pass
