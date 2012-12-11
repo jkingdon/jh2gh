@@ -225,8 +225,7 @@ class Wiki:
     self._wiki_out.write("* #(")
     self._wiki_out.write(repr(conclusion))
     self._wiki_out.write(")# ([" + self._proof_filename + "/")
-    self._wiki_out.write(name)
-    self._wiki_out.write("])\n")
+    self._wiki_out.write(name + " | " + name + "])\n")
 
   def to_string_wiki_to_wiki_out(self):
     most_recent_atom = None
