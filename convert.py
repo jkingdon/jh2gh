@@ -165,18 +165,7 @@ class Convert:
         arguments[2] = tree.Tree(new_hypotheses)
 
         if self._proof_filename != None:
-          wiki = "* "
-
-          if len(hypotheses) > 0:
-            prefix = ""
-            for h in hypotheses:
-              expression = h[1]
-              wiki += prefix + "#(" + repr(expression) + ")#"
-              prefix = ", "
-            wiki += " ⊢ "
-
-          wiki += ("#(" + repr(conclusion) + ")#" +
-            " ([" + self._proof_filename + "/" + name + " | " + name + "])\n")
+          wiki = self.wiki_text_for_theorem(name, hypotheses, conclusion)
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
           expressions.insert(i + 1, [tokenizer.Wiki(wiki)])
@@ -184,6 +173,22 @@ class Convert:
 
       self.undo_pseudo_infix(arguments)
       i += 2
+
+  def wiki_text_for_theorem(self, theorem_name, hypotheses, conclusion):
+    wiki = "* "
+
+    if len(hypotheses) > 0:
+      prefix = ""
+      for h in hypotheses:
+        expression = h[1]
+        wiki += prefix + "#(" + repr(expression) + ")#"
+        prefix = ", "
+      wiki += " ⊢ "
+
+    wiki += ("#(" + repr(conclusion) + ")#" +
+      " ([" + self._proof_filename + "/" + theorem_name + " | " + theorem_name + "])\n")
+
+    return wiki
 
   def set_opener(self, opener):
     self._opener = opener
