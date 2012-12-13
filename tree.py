@@ -1,5 +1,13 @@
 import tokenizer
 
+def token_to_string(token):
+  if token.__class__ == Tree:
+    return '(' + repr(token) + ')'
+  elif token.__class__ == tokenizer.Wiki:
+    return ''
+  else:
+    return token
+
 class Tree:
   def __init__(self, elements):
     self._elements = elements
@@ -60,14 +68,7 @@ class Tree:
   def __repr__(self):
     result = ''
     for element in self._elements:
-      if element.__class__ == Tree:
-        result += '('
-        result += repr(element)
-        result += ')'
-      elif element.__class__ == tokenizer.Wiki:
-        pass
-      else:
-        result += element
+      result += token_to_string(element)
     return result
 
   def to_string_wiki_to_comment(self):

@@ -367,6 +367,12 @@ thm (foo () ((H (p ¬))) (p ¬) (
   def test_hypothesis_or_conclusion_is_not_a_tree(self):
     self.assertEqual("thm (foo () (H p) p proof )", self.process("thm (foo () ((H p)) p ( proof))"))
 
+  def xtest_hypothesis_or_conclusion_is_not_a_tree_for_wiki(self):
+    string = "<jh>\nthm (foo () ((H p)) p ( proof))\n</jh>\n"
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
+    self.assertEqual("* #p# ⊢ #p# ([file.gh/foo | foo])\n", out.contents())
+
   def test_import(self):
     converter = convert.Convert()
     opener = string_stream.Opener()
