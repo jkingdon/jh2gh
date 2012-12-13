@@ -162,6 +162,8 @@ class Convert:
           new_hypotheses.append(hypothesis_name)
           new_hypotheses.append(" ")
           new_hypotheses.append(expression)
+          first_time = False
+
         arguments[2] = tree.Tree(new_hypotheses)
 
         if self._proof_filename != None:
