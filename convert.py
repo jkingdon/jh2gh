@@ -155,19 +155,31 @@ class Convert:
         new_hypotheses = []
         first_time = True
         for h in hypotheses:
-          name = h[0]
+          hypothesis_name = h[0]
           expression = h[1]
           if not first_time:
             new_hypotheses.append(" ")
-          new_hypotheses.append(name)
+          new_hypotheses.append(hypothesis_name)
           new_hypotheses.append(" ")
           new_hypotheses.append(expression)
         arguments[2] = tree.Tree(new_hypotheses)
 
         if self._proof_filename != None:
+          wiki = "* "
+
+          if len(hypotheses) > 0:
+            prefix = ""
+            for h in hypotheses:
+              expression = h[1]
+              wiki += prefix + "#(" + repr(expression) + ")#"
+              prefix = ", "
+            wiki += " ⊢ "
+
+          wiki += ("#(" + repr(conclusion) + ")#" +
+            " ([" + self._proof_filename + "/" + name + " | " + name + "])\n")
+
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
-          expressions.insert(i + 1, [tokenizer.Wiki("* #(" + repr(conclusion) + ")#" +
-            " ([" + self._proof_filename + "/" + name + " | " + name + "])\n")])
+          expressions.insert(i + 1, [tokenizer.Wiki(wiki)])
           i += 1
 
       self.undo_pseudo_infix(arguments)
