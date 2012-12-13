@@ -169,7 +169,6 @@ class Convert:
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
           expressions.insert(i + 1, [tokenizer.Wiki(wiki)])
-          i += 1
 
       self.undo_pseudo_infix(arguments)
       i += 2

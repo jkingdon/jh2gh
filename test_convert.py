@@ -325,6 +325,20 @@ thm (foo () () (≠ 4 5) (
     ghilbert = convert.Wiki(string_stream.StringStream(string), "/general/file.gh", out).convert()
     self.assertEqual("Now we will prove foo.\n* #(≠ 4 5)# ([/general/file.gh/foo | foo])\n", out.contents())
 
+  def test_add_multiple_references_to_theorems_to_wiki(self):
+    string = """<jh>
+thm (foo () () (≠ 4 5) (proof here))
+thm (bar () () (≠ 4 6) (proof here))
+thm (baz () () (≠ 4 7) (proof here))
+</jh>
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki(string_stream.StringStream(string), "/general/file.gh", out).convert()
+    self.assertEqual("""* #(≠ 4 5)# ([/general/file.gh/foo | foo])
+* #(≠ 4 6)# ([/general/file.gh/bar | bar])
+* #(≠ 4 7)# ([/general/file.gh/baz | baz])
+""", out.contents())
+
   def test_show_hypotheses(self):
     string = """<jh>
 thm (foo () ((H4 (< n 4)) (H2 (> n 2))) (= n 3) (
