@@ -350,6 +350,20 @@ thm (foo () ((H4 (< n 4)) (H2 (> n 2))) (= n 3) (
     ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
     self.assertEqual("* #(< n 4)#, #(> n 2)# ⊢ #(= n 3)# ([file.gh/foo | foo])\n", out.contents())
 
+  def test_undo_pseudo_infix_when_writing_reference(self):
+    string = """<jh>
+kind (formula)
+var (formula p)
+term (formula (¬ formula))
+thm (foo () ((H (p ¬))) (p ¬) (
+  H
+))
+</jh>
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
+    self.assertEqual("* #(¬ p)# ⊢ #(¬ p)# ([file.gh/foo | foo])\n", out.contents())
+
   def test_import(self):
     converter = convert.Convert()
     opener = string_stream.Opener()
