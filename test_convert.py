@@ -326,7 +326,15 @@ thm (foo () () (≠ 4 5) (
     self.assertEqual("Now we will prove foo.\n* #(≠ 4 5)# ([/general/file.gh/foo | foo])\n", out.contents())
 
   def xtest_show_hypotheses(self):
-    pass
+    string = """<jh>
+thm (foo () ((H4 (< n 4)) (H2 (> n 2))) (= n 3) (
+  proof here
+))
+</jh>
+"""
+    out = string_stream.OutputStream()
+    ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
+    self.assertEqual("* #(< n 4)#, #(> n 2)# ⊢ #(= n 3)# ([file.gh/foo | foo])\n", out.contents())
 
   def test_import(self):
     converter = convert.Convert()
