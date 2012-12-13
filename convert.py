@@ -166,9 +166,10 @@ class Convert:
 
         arguments[2] = tree.Tree(new_hypotheses)
 
-        if self._proof_filename != None:
-          self.undo_pseudo_infix(hypotheses)
+        self.undo_pseudo_infix(hypotheses)
+        if conclusion.__class__ == tree.Tree:
           self.undo_pseudo_infix(conclusion)
+        if self._proof_filename != None:
           wiki = self.wiki_text_for_theorem(name, hypotheses, conclusion)
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
