@@ -23,10 +23,11 @@ class FileOpener:
     return open(name)
 
 class Convert:
-  def __init__(self):
+  def __init__(self, proof_filename = None):
     self._variables = {}
     self._terms = {}
     self._opener = FileOpener()
+    self._proof_filename = proof_filename
 
   def store_variables(self, kind, variables):
     if not kind in self._variables:
@@ -163,6 +164,12 @@ class Convert:
           new_hypotheses.append(expression)
         arguments[2] = tree.Tree(new_hypotheses)
 
+        if self._proof_filename != None:
+          # Insert between 'thm' and arguments, to handle wikitext before/after thm
+          expressions.insert(i + 1, [tokenizer.Wiki("* #(" + repr(conclusion) + ")#" +
+            " ([" + self._proof_filename + "/" + name + " | " + name + "])\n")])
+          i += 1
+
       self.undo_pseudo_infix(arguments)
       i += 2
 
@@ -217,34 +224,19 @@ class Wiki:
     self._wiki_out = wiki_out
     self._proof = ''
 
-  def write_theorem_references(self, arguments):
-    name = arguments[0]
-    distinctness_constraints = arguments[1]
-    hypotheses = arguments[2]
-    conclusion = arguments[3]
-    self._wiki_out.write("* #(")
-    self._wiki_out.write(repr(conclusion))
-    self._wiki_out.write(")# ([" + self._proof_filename + "/")
-    self._wiki_out.write(name + " | " + name + "])\n")
-
   def to_string_wiki_to_wiki_out(self):
-    most_recent_atom = None
     for element in self._tree.all_elements():
       if element.__class__ == tree.Tree:
         self._proof += '('
         self._proof += element.to_string_wiki_to_comment()
-        if most_recent_atom == 'thm':
-          self.write_theorem_references(element)
         self._proof += ')'
       elif element.__class__ == tokenizer.Wiki:
         self._wiki_out.write(element.text())
       else:
         self._proof += element
-        if not element.isspace() and not element.startswith("#"):
-          most_recent_atom = element
 
   def convert(self):
-    Convert().convert_tree(self._tree)
+    Convert(self._proof_filename).convert_tree(self._tree)
     self.to_string_wiki_to_wiki_out()
     return self._proof
 
