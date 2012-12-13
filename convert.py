@@ -152,15 +152,15 @@ class Convert:
         arguments.insert(4, proof.all_elements())
 
         new_hypotheses = []
-        prefix = ""
+        first_time = True
         for h in hypotheses:
           name = h[0]
           expression = h[1]
-          new_hypotheses.append(prefix)
+          if not first_time:
+            new_hypotheses.append(" ")
           new_hypotheses.append(name)
           new_hypotheses.append(" ")
           new_hypotheses.append(expression)
-          prefix = " "
         arguments[2] = tree.Tree(new_hypotheses)
 
       self.undo_pseudo_infix(arguments)
