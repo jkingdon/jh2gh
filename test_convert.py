@@ -410,6 +410,10 @@ thm (foo () (H (¬ p)) (¬ p)
     result = converter.convert(string_stream.StringStream(input))
     self.assertEqual('export (INTUITIONISTIC Propositional_logic.ghi () "")', result)
 
+  def test_param(self):
+    result = self.process("param (PROPOSITIONAL Interface:Classical_propositional_calculus () ())")
+    self.assertEqual('param (PROPOSITIONAL Classical_propositional_calculus.ghi () "")', result)
+
   def test_convert_filename_main(self):
     converter = convert.Convert()
     self.assertEqual("Main/R/e/l/Relations", converter.convert_filename(

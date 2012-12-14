@@ -100,7 +100,7 @@ class Convert:
         else:
           expressions[i] = "tvar"
         self.store_variables(arguments[0], arguments[1:])
-      elif command == "import" or command == "export":
+      elif command in ["import", "export", "param"]:
         self.process_import_or_export(command, arguments)
       elif command == "term":
         assigner = VariableAssigner(self._variables)
