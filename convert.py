@@ -207,7 +207,7 @@ class Convert:
       arguments[3] = '""'
     arguments[1] = self.ghilbert_filename(underscored_name)
 
-    if command == "import":
+    if command in ["import", "param"]:
       filesystem_name = self.convert_filename(underscored_name)
       stream = self._opener.open_file(filesystem_name)
       self.convert(tokenizer.WikiTokenizer(stream))

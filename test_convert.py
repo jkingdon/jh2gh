@@ -411,8 +411,36 @@ thm (foo () (H (¬ p)) (¬ p)
     self.assertEqual('export (INTUITIONISTIC Propositional_logic.ghi () "")', result)
 
   def test_param(self):
-    result = self.process("param (PROPOSITIONAL Interface:Classical_propositional_calculus () ())")
-    self.assertEqual('param (PROPOSITIONAL Classical_propositional_calculus.ghi () "")', result)
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/o/Propositional logic", string_stream.StringStream(""))
+
+    input = "param (PROPOSITIONAL Interface:Propositional_logic () ())"
+    result = converter.convert(string_stream.StringStream(input))
+    self.assertEqual('param (PROPOSITIONAL Propositional_logic.ghi () "")', result)
+
+  def test_read_param_for_pseudo_infixes_to_undo(self):
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/o/Propositional logic",
+      string_stream.StringStream("""<jh>
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+</jh>
+"""))
+
+    input = """
+param (PROPOSITIONAL Interface:Propositional_logic () ())
+stmt (foo () () (p ¬))
+"""
+    result = converter.convert(string_stream.StringStream(input))
+    self.assertEqual("""
+param (PROPOSITIONAL Propositional_logic.ghi () "")
+stmt (foo () () (¬ p))
+""", result)
 
   def test_convert_filename_main(self):
     converter = convert.Convert()
