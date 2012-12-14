@@ -185,11 +185,11 @@ class Convert:
       prefix = ""
       for h in hypotheses:
         expression = h[1]
-        wiki += prefix + "#(" + repr(expression) + ")#"
+        wiki += prefix + "#" + tree.token_to_string(expression) + "#"
         prefix = ", "
       wiki += " ⊢ "
 
-    wiki += ("#(" + repr(conclusion) + ")#" +
+    wiki += ("#" + tree.token_to_string(conclusion) + "#" +
       " ([" + self._proof_filename + "/" + theorem_name + " | " + theorem_name + "])\n")
 
     return wiki
