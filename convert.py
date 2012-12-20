@@ -245,6 +245,9 @@ class Wiki:
     self._wiki_out = wiki_out
     self._proof = ''
 
+  def reformat(self, text):
+    return text.replace('<code>', '{{{').replace('</code>', '}}}')
+
   def to_string_wiki_to_wiki_out(self):
     for element in self._tree.all_elements():
       if element.__class__ == tree.Tree:
@@ -252,7 +255,7 @@ class Wiki:
         self._proof += element.to_string_wiki_to_comment()
         self._proof += ')'
       elif element.__class__ == tokenizer.Wiki:
-        self._wiki_out.write(element.text())
+        self._wiki_out.write(self.reformat(element.text()))
       else:
         self._proof += element
 

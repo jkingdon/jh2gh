@@ -364,6 +364,12 @@ thm (foo () ((H (p ¬))) (p ¬) (
     ghilbert = convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
     self.assertEqual("* #(¬ p)# ⊢ #(¬ p)# ([file.gh/foo | foo])\n", out.contents())
 
+  def test_wiki_markup_turn_code_into_curlies(self):
+    string = "Use either <code>x</code> or <code>y</code>."
+    out = string_stream.OutputStream()
+    convert.Wiki(string_stream.StringStream(string), "file.gh", out).convert()
+    self.assertEqual("Use either {{{x}}} or {{{y}}}.", out.contents())
+
   def test_hypothesis_or_conclusion_is_not_a_tree(self):
     self.assertEqual("thm (foo () (H p) p proof )", self.process("thm (foo () ((H p)) p ( proof))"))
 
