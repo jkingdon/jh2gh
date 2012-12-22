@@ -180,3 +180,6 @@ Here is a comment.
     sample_tree = tree.Tree([tokenizer.Wiki("We define a kind\n"), tokenizer.Wiki("We did it.")])
     sample_tree.insert(1, ["kind"])
 
+if __name__ == '__main__':
+    unittest.main()
+

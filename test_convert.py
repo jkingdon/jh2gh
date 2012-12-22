@@ -500,3 +500,6 @@ thm (foo () (H (¬ p)) (¬ p)
     result = self.process("thm (foo () ((HFORWARD (p → q)) (HREVERSE (q → p))) (p ↔ q) (proof here))")
     self.assertEqual("thm (foo () (HFORWARD (p → q) HREVERSE (q → p)) (p ↔ q)proof here )", result)
 
+if __name__ == '__main__':
+    unittest.main()
+

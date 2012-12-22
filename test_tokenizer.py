@@ -62,3 +62,6 @@ A last line."""
     self.assertEqual(["kind", " ", "(", "formula", ")", "\n"], tokens[1:7])
     self.assertEqual(tokenizer.Wiki, tokens[7].__class__)
 
+if __name__ == '__main__':
+    unittest.main()
+
