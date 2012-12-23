@@ -264,6 +264,21 @@ class Wiki:
     self.to_string_wiki_to_wiki_out()
     return self._proof
 
+class FileConverter:
+  def convert(self, underscored_name):
+    input = open(Convert().convert_filename(underscored_name), "r")
+    proof_filename = "/general/" + Convert().ghilbert_filename(underscored_name)
+    output = open("../ghilbert-app" + proof_filename, "w")
+    output.write("# Creative Commons Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)\n")
+
+    if underscored_name.split(":")[0] == "Interface":
+      expressions = tree.parse(tokenizer.WikiTokenizer(input))
+      Convert().convert_tree(expressions)
+      output.write(expressions.to_string_wiki_to_comment())
+    else:
+      wiki_out = open("../ghilbert-app/wiki/general/" + underscored_name + ".ghm", "w")
+      output.write(Wiki(input, proof_filename, wiki_out).convert())
+
 if __name__ == '__main__':
   if len(sys.argv) != 2:
     sys.stderr.write('Usage: python convert.py UNDERSCORED-NAME\n')
@@ -271,17 +286,5 @@ if __name__ == '__main__':
     sys.stderr.write('  It will output to ../ghilbert-app/general\n')
     sys.stderr.write('  UNDERSCORED-NAME is the name as specified in wikiproofs, e.g. Interface:Set_theory\n')
     exit(1)
-  underscored_name = sys.argv[1]
-  input = open(Convert().convert_filename(underscored_name), "r")
-  proof_filename = "/general/" + Convert().ghilbert_filename(underscored_name)
-  output = open("../ghilbert-app" + proof_filename, "w")
-  output.write("# Creative Commons Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)\n")
-
-  if underscored_name.split(":")[0] == "Interface":
-    expressions = tree.parse(tokenizer.WikiTokenizer(input))
-    Convert().convert_tree(expressions)
-    output.write(expressions.to_string_wiki_to_comment())
-  else:
-    wiki_out = open("../ghilbert-app/wiki/general/" + underscored_name + ".ghm", "w")
-    output.write(Wiki(input, proof_filename, wiki_out).convert())
+  FileConverter().convert(sys.argv[1])
 
