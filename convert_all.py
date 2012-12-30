@@ -19,6 +19,7 @@ class ConvertAll:
     self.convert('Convenience_theorems_of_propositional_logic')
     self.convert('Interface:Classical_propositional_calculus')
 
+#    self.convert('Interface:Axioms_of_first-order_logic')
 
 
 if __name__ == '__main__':

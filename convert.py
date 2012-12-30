@@ -95,11 +95,11 @@ class Convert:
         expressions[i] = '';
         expressions[i + 1] = '';
       elif command == "var":
+        self.store_variables(arguments[0], arguments[1:])
         if arguments[0] == "variable":
           arguments[0] = "object"
         else:
           expressions[i] = "tvar"
-        self.store_variables(arguments[0], arguments[1:])
       elif command in ["import", "export", "param"]:
         self.process_import_or_export(command, arguments)
       elif command == "term":

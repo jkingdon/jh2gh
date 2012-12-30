@@ -28,6 +28,23 @@ class test_convert(unittest.TestCase):
     self.assertEqual("kind (object)\n \nvar (object x)", self.process(
       "kind (object)\nkind (variable)\nvar (variable x)"))
 
+  def test_term_with_variable(self):
+    self.assertEqual("""
+kind (formula)
+kind (object)
+ 
+var (object x)
+tvar (formula φ ψ)
+term (formula (∀ x φ))
+""", self.process("""
+kind (formula)
+kind (object)
+kind (variable)
+var (variable x)
+var (formula φ ψ)
+term (formula (∀ variable formula))
+"""))
+
   def test_keeps_list_of_symbols_by_kind(self):
     converter =  convert.Convert()
     inputString = "var (formula p q)\nvar (formula r)\n"
