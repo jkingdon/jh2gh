@@ -3,6 +3,8 @@
 import unittest
 import convert
 import string_stream
+import tree
+import tokenizer
 
 class test_convert(unittest.TestCase):
   def process(self, inputString):
@@ -421,6 +423,34 @@ tvar (formula p)
 thm (foo () (H (¬ p)) (¬ p)
         H
  )
+""", result)
+
+  def test_variables_from_param_are_not_visible_in_imported_interface(self):
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/L/o/g/Logic1", string_stream.StringStream("""
+<jh>
+kind (formula)
+var (formula in-one)
+</jh>
+"""))
+    logic2 = string_stream.StringStream("""
+<jh>
+param (ONE Interface:Logic1 () "")
+var (formula in-two)
+term (formula (¬ formula))
+</jh>
+""")
+
+    expressions = tree.parse(tokenizer.WikiTokenizer(logic2))
+    converter.convert_tree(expressions)
+    result = expressions.to_string_wiki_to_comment()
+
+    self.assertEqual("""# 
+param (ONE Logic1.ghi () "")
+tvar (formula in-two)
+term (formula (¬ in-two))
 """, result)
 
   def test_export(self):

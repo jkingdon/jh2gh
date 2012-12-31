@@ -208,9 +208,17 @@ class Convert:
     arguments[1] = self.ghilbert_filename(underscored_name)
 
     if command in ["import", "param"]:
+      # The list of variables shouldn't be shared between us and either an import or param.
+      # Unless/until we have some kind of object specific to just one module/interface, let's
+      # try to accomplish that with a save/restore.
+      variables = self._variables
+      self._variables = {}
+
       filesystem_name = self.convert_filename(underscored_name)
       stream = self._opener.open_file(filesystem_name)
       self.convert(tokenizer.WikiTokenizer(stream))
+
+      self._variables = variables
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
