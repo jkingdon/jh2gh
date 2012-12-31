@@ -34,7 +34,17 @@ class Convert:
       self._variables[kind] = []
     self._variables[kind] += variables
 
+  def remove_value(self, expression):
+    if expression.__class__ != tree.Tree:
+      return
+    for i in range(0, len(expression)):
+      subexpression = expression[i]
+      if subexpression.__class__ == tree.Tree and len(subexpression) == 2 and subexpression[0] == 'value':
+        expression[i] = subexpression[1]
+      self.remove_value(expression[i])
+
   def undo_pseudo_infix(self, expression):
+    self.remove_value(expression) # TODO: rename undo_pseudo_infix now that it has two responsibilities?
     if expression.__class__ != tree.Tree:
       raise Exception("expected tree, got " + str(expression))
 

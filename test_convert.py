@@ -58,6 +58,11 @@ term (formula (∀ variable formula))
     self.assertEqual('p', assigner.next_name('formula'))
     self.assertEqual('q', assigner.next_name('formula'))
 
+  def test_remove_value(self):
+    inputString = "stmt (Existence () () (¬ (∀ x (¬ (= (value x) (value y))))) )"
+    result = self.process(inputString)
+    self.assertEqual("stmt (Existence () () (¬ (∀ x (¬ (= x y)))) )", result)
+
   def test_converts_basic_stmt(self):
     result = self.process("""
 kind (formula)
