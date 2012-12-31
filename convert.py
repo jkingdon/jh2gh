@@ -34,6 +34,10 @@ class Convert:
       self._variables[kind] = []
     self._variables[kind] += variables
 
+  def rewrite_tree(self, expression):
+    self.remove_value(expression)
+    self.undo_pseudo_infix(expression)
+
   def remove_value(self, expression):
     if expression.__class__ != tree.Tree:
       return
@@ -44,7 +48,6 @@ class Convert:
       self.remove_value(expression[i])
 
   def undo_pseudo_infix(self, expression):
-    self.remove_value(expression) # TODO: rename undo_pseudo_infix now that it has two responsibilities?
     if expression.__class__ != tree.Tree:
       raise Exception("expected tree, got " + str(expression))
 
@@ -125,7 +128,7 @@ class Convert:
       elif command == "def":
         definiendum = arguments[0]
         definiens = copy.deepcopy(arguments[1])
-        self.undo_pseudo_infix(definiens)
+        self.rewrite_tree(definiens)
         defined_term = definiendum[0]
         term_type = self.term_kind(definiens)
 
@@ -176,16 +179,16 @@ class Convert:
 
         arguments[2] = tree.Tree(new_hypotheses)
 
-        self.undo_pseudo_infix(hypotheses)
+        self.rewrite_tree(hypotheses)
         if conclusion.__class__ == tree.Tree:
-          self.undo_pseudo_infix(conclusion)
+          self.rewrite_tree(conclusion)
         if self._proof_filename != None:
           wiki = self.wiki_text_for_theorem(name, hypotheses, conclusion)
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
           expressions.insert(i + 1, [tokenizer.Wiki(wiki)])
 
-      self.undo_pseudo_infix(arguments)
+      self.rewrite_tree(arguments)
       i += 2
 
   def wiki_text_for_theorem(self, theorem_name, hypotheses, conclusion):
