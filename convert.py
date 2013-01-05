@@ -190,11 +190,18 @@ class Convert:
       i += 2
 
   def convert_constraints(self, constraints):
-    for constraint in constraints:
-      if constraint[0] in self._binding_variables and not constraint[1] in self._binding_variables:
+    for j in range(len(constraints)):
+      constraint = constraints[j]
+      term_index = None
+      for i in range(len(constraint)):
+        if not constraint[i] in self._binding_variables:
+          term_index = i
+      if term_index == None:
+        constraints[j] = ''
+      elif term_index > 0:
         temp = constraint[0]
-        constraint[0] = constraint[1]
-        constraint[1] = temp
+        constraint[0] = constraint[term_index]
+        constraint[term_index] = temp
 
   def convert_hypotheses(self, hypotheses):
     new_hypotheses = []

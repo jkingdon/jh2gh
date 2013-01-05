@@ -580,8 +580,19 @@ thm (foo ((φ x)) () (→ φ (∀ x φ))
  )
 """, result)
 
-  def xtest_distinct_variable_constraint_without_term(self):
-    pass
+  def test_distinct_variable_constraint_without_term(self):
+    result = self.process("""
+kind (object)
+var (variable x y z)
+var (object s t u)
+stmt (foo ((z x) (x s) (x y s)) () ())
+""")
+    self.assertEqual("""
+kind (object)
+var (object x y z)
+tvar (object s t u)
+stmt (foo ( (s x) (s y x)) () ())
+""", result)
 
 if __name__ == '__main__':
     unittest.main()
