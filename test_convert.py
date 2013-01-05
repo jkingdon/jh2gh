@@ -552,6 +552,37 @@ thm (foo () (H (¬ p)) (¬ p)
     result = self.process("thm (foo () ((HFORWARD (p → q)) (HREVERSE (q → p))) (p ↔ q) (proof here))")
     self.assertEqual("thm (foo () (HFORWARD (p → q) HREVERSE (q → p)) (p ↔ q)proof here )", result)
 
+  def test_put_term_before_variables_in_distinct_variable_constraint(self):
+    result = self.process("""
+kind (formula)
+var (formula φ ψ)
+kind (object)
+var (variable x)
+var (object s)
+term (formula (→ formula formula))
+term (formula (∀ variable formula))
+stmt (Generalization ((x φ)) () (→ φ (∀ x φ)))
+thm (foo ((x φ)) () (→ φ (∀ x φ)) (
+  x φ Generalization
+))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula φ ψ)
+kind (object)
+var (object x)
+tvar (object s)
+term (formula (→ φ ψ))
+term (formula (∀ x φ))
+stmt (Generalization ((φ x)) () (→ φ (∀ x φ)))
+thm (foo ((φ x)) () (→ φ (∀ x φ))
+  x φ Generalization
+ )
+""", result)
+
+  def xtest_distinct_variable_constraint_without_term(self):
+    pass
+
 if __name__ == '__main__':
     unittest.main()
 

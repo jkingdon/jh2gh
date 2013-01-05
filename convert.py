@@ -25,6 +25,7 @@ class FileOpener:
 class Convert:
   def __init__(self, proof_filename = None):
     self._variables = {}
+    self._binding_variables = []
     self._terms = {}
     self._opener = FileOpener()
     self._proof_filename = proof_filename
@@ -110,6 +111,7 @@ class Convert:
       elif command == "var":
         self.store_variables(arguments[0], arguments[1:])
         if arguments[0] == "variable":
+          self._binding_variables += arguments[1:]
           arguments[0] = "object"
         else:
           expressions[i] = "tvar"
@@ -165,19 +167,8 @@ class Convert:
         arguments[4] = ''
         arguments.insert(4, proof.all_elements())
 
-        new_hypotheses = []
-        first_time = True
-        for h in hypotheses:
-          hypothesis_name = h[0]
-          expression = h[1]
-          if not first_time:
-            new_hypotheses.append(" ")
-          new_hypotheses.append(hypothesis_name)
-          new_hypotheses.append(" ")
-          new_hypotheses.append(expression)
-          first_time = False
-
-        arguments[2] = tree.Tree(new_hypotheses)
+        self.convert_constraints(distinctness_constraints)
+        arguments[2] = self.convert_hypotheses(hypotheses)
 
         self.rewrite_tree(hypotheses)
         if conclusion.__class__ == tree.Tree:
@@ -187,9 +178,38 @@ class Convert:
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
           expressions.insert(i + 1, [tokenizer.Wiki(wiki)])
+      elif command == "stmt":
+        name = arguments[0]
+        distinctness_constraints = arguments[1]
+        hypotheses = arguments[2]
+        conclusion = arguments[3]
+
+        self.convert_constraints(distinctness_constraints)
 
       self.rewrite_tree(arguments)
       i += 2
+
+  def convert_constraints(self, constraints):
+    for constraint in constraints:
+      if constraint[0] in self._binding_variables and not constraint[1] in self._binding_variables:
+        temp = constraint[0]
+        constraint[0] = constraint[1]
+        constraint[1] = temp
+
+  def convert_hypotheses(self, hypotheses):
+    new_hypotheses = []
+    first_time = True
+    for h in hypotheses:
+      hypothesis_name = h[0]
+      expression = h[1]
+      if not first_time:
+        new_hypotheses.append(" ")
+      new_hypotheses.append(hypothesis_name)
+      new_hypotheses.append(" ")
+      new_hypotheses.append(expression)
+      first_time = False
+
+    return tree.Tree(new_hypotheses)
 
   def wiki_text_for_theorem(self, theorem_name, hypotheses, conclusion):
     wiki = "* "
@@ -225,13 +245,16 @@ class Convert:
       # Unless/until we have some kind of object specific to just one module/interface, let's
       # try to accomplish that with a save/restore.
       variables = self._variables
+      binding_variables = self._binding_variables
       self._variables = {}
+      self._binding_variables = []
 
       filesystem_name = self.convert_filename(underscored_name)
       stream = self._opener.open_file(filesystem_name)
       self.convert(tokenizer.WikiTokenizer(stream))
 
       self._variables = variables
+      self._binding_variables = binding_variables
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)
