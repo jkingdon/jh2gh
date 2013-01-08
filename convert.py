@@ -71,7 +71,8 @@ class Convert:
       '∧': 'Conjunction',
       '↔': 'Biconditional',
       '→': 'Implication',
-      '¬': 'Negation'
+      '¬': 'Negation',
+      '≠': 'NotEqual'
     }
     if term in preset_names:
       return preset_names[term]
@@ -134,29 +135,43 @@ class Convert:
         defined_term = definiendum[0]
         term_type = self.term_kind(definiens)
 
-        expressions[i] = "term"
-        expressions[i + 1] = tree.Tree(
-          [term_type, ' ', copy.deepcopy(definiendum)])
-        self._terms[definiendum[0]] = term_type
+        theorem_name_being_defined = self.capitalize_term(defined_term)
+        theorem_conclusion = tree.Tree([
+          self.equality_operator(term_type),
+          " ",
+          definiendum,
+          " ",
+          definiens])
 
-        if not (defined_term in ["→", "∧", "↔"]):
-          stmt_args = tree.Tree([
-            self.capitalize_term(defined_term),
-            " ",
-            tree.Tree([]),
-            " ",
-            tree.Tree([]),
-            " ",
-            tree.Tree([
-              self.equality_operator(term_type),
+        if self.processing_interface():
+          expressions[i] = "term"
+          expressions[i + 1] = tree.Tree(
+            [term_type, ' ', copy.deepcopy(definiendum)])
+          self._terms[definiendum[0]] = term_type
+
+          if not (defined_term in ["→", "∧", "↔"]):
+            stmt_args = tree.Tree([
+              theorem_name_being_defined,
               " ",
-              definiendum,
+              tree.Tree([]),
               " ",
-              definiens])
+              tree.Tree([]),
+              " ",
+              theorem_conclusion
+            ])
+            expressions.insert(i + 2, ["\n", "stmt", " ", stmt_args])
+
+            i += 2
+        else: # proof module
+          expressions[i] = 'defthm'
+          expressions[i + 1] = tree.Tree([theorem_name_being_defined, ' ', term_type, ' ',
+            definiendum, ' ',
+            tree.Tree([]), ' ',
+            tree.Tree([]), ' ',
+            theorem_conclusion, '\n',
+            '        ', definiens, ' ', 'BiconditionalReflexivity', '\n'
           ])
-          expressions.insert(i + 2, ["\n", "stmt", " ", stmt_args])
 
-          i += 2
       elif command == "thm":
         name = arguments[0]
         distinctness_constraints = arguments[1]
@@ -173,7 +188,7 @@ class Convert:
         self.rewrite_tree(hypotheses)
         if conclusion.__class__ == tree.Tree:
           self.rewrite_tree(conclusion)
-        if self._proof_filename != None:
+        if not self.processing_interface():
           wiki = self.wiki_text_for_theorem(name, hypotheses, conclusion)
 
           # Insert between 'thm' and arguments, to handle wikitext before/after thm
@@ -188,6 +203,9 @@ class Convert:
 
       self.rewrite_tree(arguments)
       i += 2
+
+  def processing_interface(self):
+    return self._proof_filename == None
 
   def convert_constraints(self, constraints):
     for j in range(len(constraints)):

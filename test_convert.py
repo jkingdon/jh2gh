@@ -8,7 +8,11 @@ import tokenizer
 
 class test_convert(unittest.TestCase):
   def process(self, inputString):
+    # For interfaces (and for the large number of tests which don't care about interface vs proof module)
     return convert.Convert().convert(string_stream.StringStream(inputString))
+
+  def process_proof_module(self, inputString):
+    return convert.Convert('Proof_module').convert(string_stream.StringStream(inputString))
 
   def test_empty(self):
     self.assertEqual("", self.process(""))
@@ -167,6 +171,30 @@ term (formula (= x y))
 term (number (double x))
 term (number (quadruple x))
 stmt (Quadruple () () (= (quadruple x) (double (double x))))
+""", result)
+
+  def test_turn_def_into_defthm(self):
+    result = self.process_proof_module("""
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+
+kind (object)
+var (object s t)
+term (object (= object object))
+def ((≠ s t) (¬ (s = t)))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (¬ p))
+
+kind (object)
+tvar (object s t)
+term (object (= s t))
+defthm (NotEqual formula (≠ s t) () () (↔ (≠ s t) (¬ (= s t)))
+        (¬ (= s t)) BiconditionalReflexivity
+)
 """, result)
 
   def test_convert_definition_of_predicate(self):
