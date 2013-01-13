@@ -580,7 +580,7 @@ thm (foo () (H (¬ p)) (¬ p)
     result = self.process("thm (foo () ((HFORWARD (p → q)) (HREVERSE (q → p))) (p ↔ q) (proof here))")
     self.assertEqual("thm (foo () (HFORWARD (p → q) HREVERSE (q → p)) (p ↔ q)proof here )", result)
 
-  def test_put_term_before_variables_in_distinct_variable_constraint(self):
+  def test_put_term_before_variables_in_constraint(self):
     result = self.process("""
 kind (formula)
 var (formula φ ψ)
@@ -620,6 +620,28 @@ kind (object)
 var (object x y z)
 tvar (object s t u)
 stmt (foo ( (s x) (s y x)) () ())
+""", result)
+
+  def test_distinct_variable_constraint_for_variable_just_used_in_proof(self):
+    result = self.process("""
+kind (formula)
+kind (object)
+var (variable x y z)
+var (object s t u)
+term (formula (= object object))
+thm (foo ((s x) (s y) (s z)) ((H (s = y))) (s = z) (
+    x mumble
+))
+""")
+    self.assertEqual("""
+kind (formula)
+kind (object)
+var (object x y z)
+tvar (object s t u)
+term (formula (= s t))
+thm (foo ( (s y) (s z)) (H (= s y)) (= s z)
+    x mumble
+ )
 """, result)
 
 if __name__ == '__main__':

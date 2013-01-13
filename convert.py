@@ -183,6 +183,7 @@ class Convert:
         arguments.insert(4, proof.all_elements())
 
         self.convert_constraints(distinctness_constraints)
+        self.snip_unused_constraints(distinctness_constraints, hypotheses, conclusion)
         arguments[2] = self.convert_hypotheses(hypotheses)
 
         self.rewrite_tree(hypotheses)
@@ -220,6 +221,27 @@ class Convert:
         temp = constraint[0]
         constraint[0] = constraint[term_index]
         constraint[term_index] = temp
+
+  def snip_unused_constraints(self, constraints, hypotheses, conclusion):
+    variables = self.find_variables(conclusion).union(self.find_variables(hypotheses))
+    for j in range(len(constraints)):
+      constraint = constraints[j]
+      for i in range(len(constraint)):
+        if not constraint[i] in variables:
+          constraints[j] = ''
+          break
+
+  def find_variables(self, expression):
+    result = set()
+    if expression.__class__ == tree.Tree:
+      for subtree in expression:
+        result = result.union(self.find_variables(subtree))
+    elif expression.__class__ == tokenizer.Wiki:
+      pass
+    else:
+      # OK to add terms and such too.
+      result.add(expression)
+    return result
 
   def convert_hypotheses(self, hypotheses):
     new_hypotheses = []
