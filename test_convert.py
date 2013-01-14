@@ -644,6 +644,31 @@ thm (foo ( (s y) (s z)) (H (= s y)) (= s z)
  )
 """, result)
 
+  def test_do_not_remove_constraints_with_more_than_two_arguments(self):
+    # We could of course try to reduce (s x y) to (s x) if the (s y) is not
+    # needed, but it seems simpler to just leave in the constraint and let a
+    # human figure it out.
+    result = self.process("""
+kind (formula)
+kind (object)
+var (variable x y z)
+var (object s t u)
+term (formula (= object object))
+thm (foo ((s x y)) ((H (s = y))) (s = z) (
+    x mumble
+))
+""")
+    self.assertEqual("""
+kind (formula)
+kind (object)
+var (object x y z)
+tvar (object s t u)
+term (formula (= s t))
+thm (foo ((s x y)) (H (= s y)) (= s z)
+    x mumble
+ )
+""", result)
+
 if __name__ == '__main__':
     unittest.main()
 

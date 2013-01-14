@@ -226,10 +226,11 @@ class Convert:
     variables = self.find_variables(conclusion).union(self.find_variables(hypotheses))
     for j in range(len(constraints)):
       constraint = constraints[j]
-      for i in range(len(constraint)):
-        if not constraint[i] in variables:
-          constraints[j] = ''
-          break
+      if len(constraint) == 2:
+        for i in range(len(constraint)):
+          if not constraint[i] in variables:
+            constraints[j] = ''
+            break
 
   def find_variables(self, expression):
     result = set()
