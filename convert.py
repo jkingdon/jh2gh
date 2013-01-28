@@ -294,8 +294,10 @@ class Convert:
       # try to accomplish that with a save/restore.
       variables = self._variables
       binding_variables = self._binding_variables
+      proof_filename = self._proof_filename
       self._variables = {}
       self._binding_variables = []
+      self._proof_filename = None
 
       filesystem_name = self.convert_filename(underscored_name)
       stream = self._opener.open_file(filesystem_name)
@@ -303,6 +305,7 @@ class Convert:
 
       self._variables = variables
       self._binding_variables = binding_variables
+      self._proof_filename = proof_filename
 
   def convert_filename(self, underscored_name):
     namespace, name = self.split_filename(underscored_name)

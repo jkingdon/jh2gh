@@ -528,6 +528,51 @@ param (PROPOSITIONAL Propositional_logic.ghi () "")
 stmt (foo () () (¬ p))
 """, result)
 
+  def test_undo_pseudo_infix_for_imported_term(self):
+    converter = convert.Convert()
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/o/Propositional logic",
+      string_stream.StringStream("""<jh>
+kind (formula)
+var (formula p q)
+term (formula (¬ formula))
+</jh>
+"""))
+
+    input = """
+import (PROPOSITIONAL Interface:Propositional_logic () ())
+thm (foo () () (p ¬) ( proof here))
+"""
+    result = converter.convert(string_stream.StringStream(input))
+    self.assertEqual("""
+import (PROPOSITIONAL Propositional_logic.ghi () "")
+thm (foo () () (¬ p) proof here )
+""", result)
+
+  def test_undo_pseudo_infix_for_imported_def(self):
+    converter = convert.Convert('main')
+    opener = string_stream.Opener()
+    converter.set_opener(opener)
+    opener.set_file("Interface/P/r/o/Propositional logic",
+      string_stream.StringStream("""<jh>
+kind (formula)
+var (formula p q r)
+term (formula (∧ formula formula))
+def ((and3 p q r) ((p ∧ q) ∧ r))
+</jh>
+"""))
+
+    input = """
+import (PROPOSITIONAL Interface:Propositional_logic () ())
+thm (foo () () (p q and3 r) ( proof here))
+"""
+    result = converter.convert(string_stream.StringStream(input))
+    self.assertEqual("""
+import (PROPOSITIONAL Propositional_logic.ghi () "")
+thm (foo () () (and3 p q r) proof here )
+""", result)
+
   def test_convert_filename_main(self):
     converter = convert.Convert()
     self.assertEqual("Main/R/e/l/Relations", converter.convert_filename(
