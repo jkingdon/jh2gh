@@ -264,6 +264,20 @@ term (formula (four-not p))
 stmt (Four-not () () (↔ (four-not p) (double-not (double-not p))))
 """, result)
 
+  def test_turn_not_equal_into_negation_and_equality(self):
+    result = self.process("""
+kind (object)
+var (object s t)
+term (formula (≠ object object))
+thm (foo () () (s ≠ t) ( proof here))
+""")
+    self.assertEqual("""
+kind (object)
+tvar (object s t)
+term (formula (¬ (= s t)))
+thm (foo () () (¬ (= s t)) proof here )
+""", result)
+
   def test_undoing_infix_and_defs_which_rely_on_others(self):
     result = self.process("""
 kind (formula)

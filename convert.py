@@ -38,6 +38,7 @@ class Convert:
   def rewrite_tree(self, expression):
     self.remove_value(expression)
     self.undo_pseudo_infix(expression)
+    self.rewrite_not_equal(expression)
 
   def remove_value(self, expression):
     if expression.__class__ != tree.Tree:
@@ -64,6 +65,16 @@ class Convert:
       for j in range(term_index - 1, -1, -1):
         expression[j + 1] = expression[j]
       expression[0] = term
+
+  def rewrite_not_equal(self, expression):
+    if expression.__class__ != tree.Tree:
+      return
+    for i in range(0, len(expression)):
+      subexpression = expression[i]
+      if subexpression.__class__ == tree.Tree and len(subexpression) == 3 and subexpression[0] == '≠':
+        expression[i] = tree.Tree(['¬', ' ',
+          tree.Tree(['=', ' ', subexpression[1], ' ', subexpression[2]])])
+      self.rewrite_not_equal(expression[i])
 
   def capitalize_term(self, term):
     preset_names = {
