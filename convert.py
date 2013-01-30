@@ -182,6 +182,7 @@ class Convert:
             theorem_conclusion, '\n',
             '        ', definiens, ' ', 'BiconditionalReflexivity', '\n'
           ])
+          self._terms[definiendum[0]] = term_type
 
       elif command == "thm":
         name = arguments[0]

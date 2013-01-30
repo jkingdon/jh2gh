@@ -153,6 +153,26 @@ p #afternestedp
 )))
 """, result)
 
+  def test_undo_pseudo_infix_and_defthm(self):
+    result = self.process_proof_module("""
+kind (formula)
+var (formula p q)
+term (formula (∨ formula formula))
+term (formula (¬ formula))
+def ((→ p q) (∨ (¬ p) q))
+thm (id () () (p → p) ( proof here))
+""")
+    self.assertEqual("""
+kind (formula)
+tvar (formula p q)
+term (formula (∨ p q))
+term (formula (¬ p))
+defthm (Implication formula (→ p q) () () (↔ (→ p q) (∨ (¬ p) q))
+        (∨ (¬ p) q) BiconditionalReflexivity
+)
+thm (id () () (→ p p) proof here )
+""", result)
+
 
   def test_turn_def_into_term_and_statement(self):
     result = self.process("""
